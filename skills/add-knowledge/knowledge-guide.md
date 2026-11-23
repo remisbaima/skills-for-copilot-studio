@@ -79,8 +79,6 @@ source:
 - `publisherName` — optional; shown in the Copilot Studio UI
 - `triggerCondition` — supported; use `=false` to opt out of automatic `UniversalSearchTool` searches
 
-Use the template at `templates/knowledge/graph-connector.knowledge.mcs.yml`.
-
 ### Naming & Organization
 - **Line 1 — `# Name:`** — the display name shown in the Copilot Studio UI
 - **Line 2 — plain comment** — the description of the knowledge source (no `Description:` prefix, just the text directly). This is what the orchestrator's `UniversalSearchTool` reads to decide which sources to include when the agent has more than 25 knowledge sources. Write it to clearly describe the subject matter covered: `# HR leave policies and employee entitlements` is better than `# HR docs`
@@ -319,7 +317,7 @@ beginDialog:
 
 ### Topic-Level Knowledge Control
 - Use `triggerCondition: =false` on a knowledge source to opt it out of automatic `UniversalSearchTool` searches — it will only be used when explicitly referenced in a `SearchAndSummarizeContent` node
-- Use the `knowledgeSourceIds` filter in a `SearchAndSummarizeContent` node to restrict search to specific sources for a given topic
+- Use `knowledgeSources` (`kind: SearchSpecificKnowledgeSources`) in a `SearchAndSummarizeContent` node to restrict search to specific sources for a given topic
 - Use `OnKnowledgeRequested` to intercept all knowledge searches and apply custom routing or pre-processing
 - If a topic must never use knowledge (e.g. pure transactional flows), explicitly avoid `SearchAndSummarizeContent` nodes in it
 

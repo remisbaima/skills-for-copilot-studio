@@ -55,6 +55,6 @@ Instead, offer to connect the user with a human agent or provide a contact metho
 
 ## What Instructions Cannot Do
 - They cannot override the model's safety guardrails
-- They cannot force the agent to search a specific knowledge source — use `knowledgeSourceIds` in a `SearchAndSummarizeContent` node for that
+- They cannot force the agent to search a specific knowledge source — use `knowledgeSources` (`kind: SearchSpecificKnowledgeSources`) in a `SearchAndSummarizeContent` node for that
 - They cannot guarantee the agent will never hallucinate — grounding reduces it but does not eliminate it
 - They cannot change chunking or embedding behavior — that is controlled by the knowledge source content quality
