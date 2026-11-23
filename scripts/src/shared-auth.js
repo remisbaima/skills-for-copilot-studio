@@ -79,8 +79,8 @@ async function createMsalApp(tenantId, clientId, cacheSlot) {
     });
   }
 
-  // Default path — singleton keyed by tenantId:clientId
-  const key = `${tenantId}:${clientId}`;
+  // Default path — singleton keyed by normalized tenantId:clientId
+  const key = `${String(tenantId || "").toLowerCase()}:${clientId}`;
   if (_msalApps.has(key)) return _msalApps.get(key);
 
   const cachePlugin = await getDefaultCachePlugin();
@@ -170,8 +170,11 @@ async function acquireTokenInteractive(tenantId, clientId, scopes, cacheSlot) {
 async function acquireTokenSilent(tenantId, clientId, scopes, cacheSlot) {
   const app = await createMsalApp(tenantId, clientId, cacheSlot);
   const allAccounts = await app.getTokenCache().getAllAccounts();
-  // Filter to accounts matching this tenant to avoid cross-tenant errors
-  const accounts = allAccounts.filter(a => a.tenantId === tenantId);
+  // Filter to accounts matching this tenant (case-insensitive) to avoid cross-tenant errors
+  const normalizedTenant = String(tenantId || "").toLowerCase();
+  const accounts = normalizedTenant
+    ? allAccounts.filter((a) => String(a.tenantId || "").toLowerCase() === normalizedTenant)
+    : [];
   if (accounts.length > 0) {
     try {
       const result = await app.acquireTokenSilent({
