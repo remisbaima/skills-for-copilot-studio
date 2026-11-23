@@ -20,12 +20,37 @@ if (!r || !d) {
 const src = p.join(r, 'scripts', 'native-deps.json');
 const dst = p.join(d, 'package.json');
 
-try {
-  if (fs.readFileSync(src, 'utf8') !== fs.readFileSync(dst, 'utf8')) throw 0;
-} catch {
+function hasInstalledDeps(dataDir, desiredText) {
+  try {
+    if (fs.readFileSync(dst, 'utf8') !== desiredText) return false;
+  } catch {
+    return false;
+  }
+  let deps = [];
+  try {
+    deps = Object.keys(JSON.parse(desiredText)?.dependencies || {});
+  } catch {
+    return false;
+  }
+  const nmDir = p.join(dataDir, 'node_modules');
+  return deps.every((pkg) => fs.existsSync(p.join(nmDir, ...pkg.split('/'), 'package.json')));
+}
+
+const desired = fs.readFileSync(src, 'utf8');
+if (!hasInstalledDeps(d, desired)) {
   fs.mkdirSync(d, { recursive: true });
-  fs.copyFileSync(src, dst);
-  cp.execSync('npm install --no-audit --no-fund', { cwd: d, stdio: ['ignore', process.stderr, process.stderr] });
+  fs.writeFileSync(dst, desired);
+  try {
+    cp.execSync('npm install --omit=dev --no-audit --no-fund', {
+      cwd: d,
+      stdio: ['ignore', process.stderr, process.stderr],
+    });
+  } catch (err) {
+    try {
+      fs.rmSync(dst, { force: true });
+    } catch {}
+    throw err;
+  }
 }
 
 var pd = p.join(os.homedir(), '.copilot-studio-cli');
