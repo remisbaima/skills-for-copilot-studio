@@ -22,23 +22,19 @@ If you are here because the caller explicitly provided a DirectLine secret or to
 ### Token endpoint mode
 
 ```bash
-node ${CLAUDE_SKILL_DIR}/../../scripts/directline-chat.bundle.js \
-  --token-endpoint "<url>" "<utterance>"
+node "${CLAUDE_SKILL_DIR}/../../scripts/directline-chat.bundle.js" --token-endpoint "<url>" "<utterance>"
 ```
 
 ### DirectLine secret mode
 
 ```bash
-node ${CLAUDE_SKILL_DIR}/../../scripts/directline-chat.bundle.js \
-  --directline-secret "<secret>" "<utterance>"
+node "${CLAUDE_SKILL_DIR}/../../scripts/directline-chat.bundle.js" --directline-secret "<secret>" "<utterance>"
 ```
 
 ### Multi-turn
 
 ```bash
-node ${CLAUDE_SKILL_DIR}/../../scripts/directline-chat.bundle.js \
-  --token-endpoint "<url>" "<follow-up>" \
-  --conversation-id <id> --directline-token "<token>"
+node "${CLAUDE_SKILL_DIR}/../../scripts/directline-chat.bundle.js" --token-endpoint "<url>" "<follow-up>" --conversation-id <id> --directline-token "<token>"
 ```
 
 **Always pass `--directline-token`** when resuming. DirectLine tokens are bound to the conversation. They expire after ~30 min.

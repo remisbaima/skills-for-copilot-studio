@@ -15,12 +15,7 @@ Validate Copilot Studio agent YAML files using the LanguageServerHost binary's f
 
 2. **Run LSP-based validation**:
    ```bash
-   node ${CLAUDE_SKILL_DIR}/../../scripts/manage-agent.bundle.js validate \
-     --workspace "<path-to-agent-folder>" \
-     --tenant-id "<tenantId>" \
-     --environment-id "<envId>" \
-     --environment-url "<envUrl>" \
-     --agent-mgmt-url "<mgmtUrl>"
+   node "${CLAUDE_SKILL_DIR}/../../scripts/manage-agent.bundle.js" validate --workspace "<path-to-agent-folder>" --tenant-id "<tenantId>" --environment-id "<envId>" --environment-url "<envUrl>" --agent-mgmt-url "<mgmtUrl>"
    ```
    This validates all `.mcs.yml` files in the workspace using the LSP binary's full diagnostics: YAML structure, Power Fx expressions, schema validation, cross-file references, and environment-specific checks.
 
@@ -36,7 +31,7 @@ Validate Copilot Studio agent YAML files using the LanguageServerHost binary's f
 
 5. **For additional context on specific errors**, use schema lookup:
    ```bash
-   node ${CLAUDE_SKILL_DIR}/../../scripts/schema-lookup.bundle.js resolve <kind>
+   node "${CLAUDE_SKILL_DIR}/../../scripts/schema-lookup.bundle.js" resolve <kind>
    ```
 
 6. **Report findings**:

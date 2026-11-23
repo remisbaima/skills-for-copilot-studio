@@ -34,8 +34,8 @@ Create a new child agent (AgentDialog) that the parent agent's orchestrator can 
 
 2. **Look up the AgentDialog schema**:
    ```bash
-   node ${CLAUDE_SKILL_DIR}/../../scripts/schema-lookup.bundle.js resolve AgentDialog
-   node ${CLAUDE_SKILL_DIR}/../../scripts/schema-lookup.bundle.js resolve OnToolSelected
+   node "${CLAUDE_SKILL_DIR}/../../scripts/schema-lookup.bundle.js" resolve AgentDialog
+   node "${CLAUDE_SKILL_DIR}/../../scripts/schema-lookup.bundle.js" resolve OnToolSelected
    ```
 
 3. **Determine from the user**:

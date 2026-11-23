@@ -60,10 +60,7 @@ The `auth` command acquires a generic `api.powerplatform.com` token using **devi
 Run with a **5-minute timeout**:
 
 ```bash
-node ${CLAUDE_SKILL_DIR}/../../scripts/manage-agent.bundle.js auth \
-  --tenant-id "<tenantId>" \
-  --client-id "<clientId>" \
-  --environment-url "<environmentUrl>"
+node "${CLAUDE_SKILL_DIR}/../../scripts/manage-agent.bundle.js" auth --tenant-id "<tenantId>" --client-id "<clientId>" --environment-url "<environmentUrl>"
 ```
 
 **Timeout: 300000ms (5 minutes)** — set this on the Bash tool call.
@@ -113,12 +110,7 @@ All commands auto-detect the agent directory (finds the subfolder with `.mcs/con
 `--client-id` is optional. When omitted, uses VS Code's 1p client with interactive browser login.
 
 ```bash
-node ${CLAUDE_SKILL_DIR}/../../scripts/manage-agent.bundle.js pull \
-  --workspace "<path-to-agent-folder>" \
-  --tenant-id "<tenantId>" \
-  --environment-id "<envId>" \
-  --environment-url "<envUrl>" \
-  --agent-mgmt-url "<mgmtUrl>"
+node "${CLAUDE_SKILL_DIR}/../../scripts/manage-agent.bundle.js" pull --workspace "<path-to-agent-folder>" --tenant-id "<tenantId>" --environment-id "<envId>" --environment-url "<envUrl>" --agent-mgmt-url "<mgmtUrl>"
 ```
 
 ### Push (upload local changes)
@@ -128,12 +120,7 @@ node ${CLAUDE_SKILL_DIR}/../../scripts/manage-agent.bundle.js pull \
 Push automatically validates all `.mcs.yml` files before pushing and blocks if there are errors. Add `--force` to bypass validation (not recommended).
 
 ```bash
-node ${CLAUDE_SKILL_DIR}/../../scripts/manage-agent.bundle.js push \
-  --workspace "<path-to-agent-folder>" \
-  --tenant-id "<tenantId>" \
-  --environment-id "<envId>" \
-  --environment-url "<envUrl>" \
-  --agent-mgmt-url "<mgmtUrl>"
+node "${CLAUDE_SKILL_DIR}/../../scripts/manage-agent.bundle.js" push --workspace "<path-to-agent-folder>" --tenant-id "<tenantId>" --environment-id "<envId>" --environment-url "<envUrl>" --agent-mgmt-url "<mgmtUrl>"
 ```
 
 ### Validate (check YAML before pushing)
@@ -141,12 +128,7 @@ node ${CLAUDE_SKILL_DIR}/../../scripts/manage-agent.bundle.js push \
 Validates all `.mcs.yml` files in the workspace using the LSP binary's full diagnostics (YAML structure, Power Fx, schema, cross-file references).
 
 ```bash
-node ${CLAUDE_SKILL_DIR}/../../scripts/manage-agent.bundle.js validate \
-  --workspace "<path-to-agent-folder>" \
-  --tenant-id "<tenantId>" \
-  --environment-id "<envId>" \
-  --environment-url "<envUrl>" \
-  --agent-mgmt-url "<mgmtUrl>"
+node "${CLAUDE_SKILL_DIR}/../../scripts/manage-agent.bundle.js" validate --workspace "<path-to-agent-folder>" --tenant-id "<tenantId>" --environment-id "<envId>" --environment-url "<envUrl>" --agent-mgmt-url "<mgmtUrl>"
 ```
 
 Returns JSON: `{ "valid": true|false, "summary": { "errors": N, "warnings": N }, "files": [...] }`
@@ -158,22 +140,13 @@ Requires either `--agent-id` (the bot GUID from `list-agents`) **or** `--url` (a
 **With explicit IDs:**
 
 ```bash
-node ${CLAUDE_SKILL_DIR}/../../scripts/manage-agent.bundle.js clone \
-  --workspace "<target-folder>" \
-  --tenant-id "<tenantId>" \
-  --environment-id "<envId>" \
-  --environment-url "<envUrl>" \
-  --agent-mgmt-url "<mgmtUrl>" \
-  --agent-id "<agentId>"
+node "${CLAUDE_SKILL_DIR}/../../scripts/manage-agent.bundle.js" clone --workspace "<target-folder>" --tenant-id "<tenantId>" --environment-id "<envId>" --environment-url "<envUrl>" --agent-mgmt-url "<mgmtUrl>" --agent-id "<agentId>"
 ```
 
 **With a Copilot Studio URL (recommended shortcut):**
 
 ```bash
-node ${CLAUDE_SKILL_DIR}/../../scripts/manage-agent.bundle.js clone \
-  --workspace "<target-folder>" \
-  --tenant-id "<tenantId>" \
-  --url "https://copilotstudio.microsoft.com/environments/<envId>/bots/<agentId>/overview"
+node "${CLAUDE_SKILL_DIR}/../../scripts/manage-agent.bundle.js" clone --workspace "<target-folder>" --tenant-id "<tenantId>" --url "https://copilotstudio.microsoft.com/environments/<envId>/bots/<agentId>/overview"
 ```
 
 When `--url` is provided, the script extracts `environmentId` and `agentId` from the URL and resolves `environmentUrl` and `agentMgmtUrl` automatically via the BAP API. The `--url` flag also works with `push`, `pull`, `changes`, and `validate` commands.
@@ -183,12 +156,7 @@ When `--url` is provided, the script extracts `environmentId` and `agentId` from
 `--client-id` is optional. When omitted, uses VS Code's 1p client with interactive browser login.
 
 ```bash
-node ${CLAUDE_SKILL_DIR}/../../scripts/manage-agent.bundle.js changes \
-  --workspace "<path-to-agent-folder>" \
-  --tenant-id "<tenantId>" \
-  --environment-id "<envId>" \
-  --environment-url "<envUrl>" \
-  --agent-mgmt-url "<mgmtUrl>"
+node "${CLAUDE_SKILL_DIR}/../../scripts/manage-agent.bundle.js" changes --workspace "<path-to-agent-folder>" --tenant-id "<tenantId>" --environment-id "<envId>" --environment-url "<envUrl>" --agent-mgmt-url "<mgmtUrl>"
 ```
 
 ### Publish (make draft agent live)
@@ -200,11 +168,7 @@ Publishes the agent so that the current draft becomes the live version reachable
 The command polls the `publishedon` field on the bot entity until the timestamp changes, confirming that publish has taken effect. Default timeout is 5 minutes.
 
 ```bash
-node ${CLAUDE_SKILL_DIR}/../../scripts/manage-agent.bundle.js publish \
-  --workspace "<path-to-agent-folder>" \
-  --tenant-id "<tenantId>" \
-  --environment-url "<envUrl>" \
-  [--timeout <ms>]
+node "${CLAUDE_SKILL_DIR}/../../scripts/manage-agent.bundle.js" publish --workspace "<path-to-agent-folder>" --tenant-id "<tenantId>" --environment-url "<envUrl>" [--timeout <ms>]
 ```
 
 **Timeout: 300000ms (5 minutes)** — set this on the Bash tool call.
@@ -227,10 +191,7 @@ Optional: `--agent-id "<agentId>"` overrides the bot ID from `conn.json`.
 Uses Dataverse REST API directly (no LSP binary needed). `--client-id` is optional.
 
 ```bash
-node ${CLAUDE_SKILL_DIR}/../../scripts/manage-agent.bundle.js list-agents \
-  --tenant-id "<tenantId>" \
-  --environment-url "<envUrl>" \
-  [--no-owner]
+node "${CLAUDE_SKILL_DIR}/../../scripts/manage-agent.bundle.js" list-agents --tenant-id "<tenantId>" --environment-url "<envUrl>" [--no-owner]
 ```
 
 By default lists only agents owned by the current user. Add `--no-owner` to list all unmanaged agents.
@@ -240,8 +201,7 @@ By default lists only agents owned by the current user. Add `--no-owner` to list
 Uses BAP REST API directly (no LSP binary needed). `--client-id` is optional.
 
 ```bash
-node ${CLAUDE_SKILL_DIR}/../../scripts/manage-agent.bundle.js list-envs \
-  --tenant-id "<tenantId>"
+node "${CLAUDE_SKILL_DIR}/../../scripts/manage-agent.bundle.js" list-envs --tenant-id "<tenantId>"
 ```
 
 

@@ -30,7 +30,7 @@ In Copilot Studio, the elements inside a topic's `actions` array are **nodes** (
 
 3. **Look up the node schema**:
    ```bash
-   node ${CLAUDE_SKILL_DIR}/../../scripts/schema-lookup.bundle.js resolve <NodeType>
+   node "${CLAUDE_SKILL_DIR}/../../scripts/schema-lookup.bundle.js" resolve <NodeType>
    ```
 
 4. **Read the existing topic file** to understand its current structure.

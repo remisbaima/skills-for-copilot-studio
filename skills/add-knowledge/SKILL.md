@@ -43,7 +43,7 @@ Add a knowledge source to the agent. Supports **Public Website**, **SharePoint**
 
 5. **Look up the knowledge source schema**:
    ```bash
-   node ${CLAUDE_SKILL_DIR}/../../scripts/schema-lookup.bundle.js resolve KnowledgeSourceConfiguration
+   node "${CLAUDE_SKILL_DIR}/../../scripts/schema-lookup.bundle.js" resolve KnowledgeSourceConfiguration
    ```
 
 6. **Generate the knowledge source YAML**.

@@ -59,10 +59,7 @@ https://copilotstudio.preview.microsoft.com/environments/<envId>/bots/<agentId>
 If the user provides a URL like this, you still need a `tenantId` (from a `conn.json` or by asking the user). Then **skip to Phase 3**, passing `--url` instead of `--agent-id` / `--environment-id` / `--environment-url` / `--agent-mgmt-url`:
 
 ```bash
-node ${CLAUDE_SKILL_DIR}/../../scripts/manage-agent.bundle.js clone \
-  --workspace "." \
-  --tenant-id "<tenantId>" \
-  --url "<copilotStudioUrl>"
+node "${CLAUDE_SKILL_DIR}/../../scripts/manage-agent.bundle.js" clone --workspace "." --tenant-id "<tenantId>" --url "<copilotStudioUrl>"
 ```
 
 The script will parse the URL to extract the environment ID and agent ID, then resolve the remaining environment details (Dataverse URL, agent management URL) automatically via the BAP API.
@@ -80,8 +77,7 @@ Tell the user: **"A browser window may open for Microsoft sign-in (tokens are ca
 Run the list-envs command:
 
 ```bash
-node ${CLAUDE_SKILL_DIR}/../../scripts/manage-agent.bundle.js list-envs \
-  --tenant-id "<tenantId>"
+node "${CLAUDE_SKILL_DIR}/../../scripts/manage-agent.bundle.js" list-envs --tenant-id "<tenantId>"
 ```
 
 **Timeout: 300000ms (5 minutes)** — set this on the Bash tool call to allow time for browser auth.
@@ -106,10 +102,7 @@ First, ask the user: **"Do you want to list only agents you own, or all agents i
 - If **all agents** → add `--no-owner` flag
 
 ```bash
-node ${CLAUDE_SKILL_DIR}/../../scripts/manage-agent.bundle.js list-agents \
-  --tenant-id "<tenantId>" \
-  --environment-url "<environmentUrl>" \
-  [--no-owner]
+node "${CLAUDE_SKILL_DIR}/../../scripts/manage-agent.bundle.js" list-agents --tenant-id "<tenantId>" --environment-url "<environmentUrl>" [--no-owner]
 ```
 
 **Timeout: 300000ms (5 minutes)**
@@ -129,13 +122,7 @@ Ask the user to pick an agent. Extract the `agentId`.
 Run the clone command. The workspace should be the current directory (`.`). The `--agent-id` is required (from Phase 2):
 
 ```bash
-node ${CLAUDE_SKILL_DIR}/../../scripts/manage-agent.bundle.js clone \
-  --workspace "." \
-  --tenant-id "<tenantId>" \
-  --agent-id "<agentId>" \
-  --environment-id "<environmentId>" \
-  --environment-url "<environmentUrl>" \
-  --agent-mgmt-url "<agentMgmtUrl>"
+node "${CLAUDE_SKILL_DIR}/../../scripts/manage-agent.bundle.js" clone --workspace "." --tenant-id "<tenantId>" --agent-id "<agentId>" --environment-id "<environmentId>" --environment-url "<environmentUrl>" --agent-mgmt-url "<agentMgmtUrl>"
 ```
 
 **Timeout: 300000ms (5 minutes)**

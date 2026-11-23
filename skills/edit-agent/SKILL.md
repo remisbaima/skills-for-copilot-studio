@@ -25,7 +25,7 @@ Modify agent metadata (`agent.mcs.yml`) or configuration (`settings.mcs.yml`).
 
 3. **If the user wants to change the AI model**, run the schema lookup tool first:
    ```bash
-   node ${CLAUDE_SKILL_DIR}/../../scripts/schema-lookup.bundle.js models
+   node "${CLAUDE_SKILL_DIR}/../../scripts/schema-lookup.bundle.js" models
    ```
    Use the output to determine the correct `modelNameHint` and `provider` values.
    **CRITICAL:** Do NOT include `kind` in the model block — the agent-level schema uses `CurrentModelsNoKind`.

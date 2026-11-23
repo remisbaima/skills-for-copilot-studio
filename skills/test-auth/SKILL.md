@@ -64,7 +64,7 @@ If the user doesn't have one, guide them:
 Run the auth command (opens a browser — no device code needed):
 
 ```bash
-node ${CLAUDE_SKILL_DIR}/../../scripts/eval-api.bundle.js auth --workspace <path> --client-id <id>
+node "${CLAUDE_SKILL_DIR}/../../scripts/eval-api.bundle.js" auth --workspace <path> --client-id <id>
 ```
 
 If successful, you'll see:

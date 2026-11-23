@@ -15,15 +15,13 @@ Send a single utterance to a published agent via the DirectLine v3 REST API. Use
 1. Run the script with `--token-endpoint` (from detect-mode output) and the utterance from `$ARGUMENTS`:
 
    ```bash
-   node ${CLAUDE_SKILL_DIR}/../../scripts/chat-with-agent.bundle.js \
-     --token-endpoint "<tokenEndpoint>" "<utterance>"
+   node "${CLAUDE_SKILL_DIR}/../../scripts/chat-with-agent.bundle.js" --token-endpoint "<tokenEndpoint>" "<utterance>"
    ```
 
    If the user provided a DirectLine secret instead:
 
    ```bash
-   node ${CLAUDE_SKILL_DIR}/../../scripts/chat-with-agent.bundle.js \
-     --directline-secret "<secret>" "<utterance>"
+   node "${CLAUDE_SKILL_DIR}/../../scripts/chat-with-agent.bundle.js" --directline-secret "<secret>" "<utterance>"
    ```
 
 2. Parse the JSON output from stdout.
@@ -65,8 +63,8 @@ The agent requires the user to authenticate (manual auth agents):
 ```
 
 1. Show the `signin_url` to the user, ask for the validation code
-2. Send the code: `node ${CLAUDE_SKILL_DIR}/../../scripts/chat-with-agent.bundle.js <resume_command with code substituted>`
-3. Re-send the utterance: `node ${CLAUDE_SKILL_DIR}/../../scripts/chat-with-agent.bundle.js <followup_command>`
+2. Send the code: `node "${CLAUDE_SKILL_DIR}/../../scripts/chat-with-agent.bundle.js" <resume_command with code substituted>`
+3. Re-send the utterance: `node "${CLAUDE_SKILL_DIR}/../../scripts/chat-with-agent.bundle.js" <followup_command>`
 
 Use `resume_command` and `followup_command` exactly as given.
 
@@ -75,9 +73,7 @@ Use `resume_command` and `followup_command` exactly as given.
 Pass all three values from the previous response:
 
 ```bash
-node ${CLAUDE_SKILL_DIR}/../../scripts/chat-with-agent.bundle.js \
-  --token-endpoint "<url>" "<follow-up>" \
-  --conversation-id "<id>" --directline-token "<token>" --watermark "<watermark>"
+node "${CLAUDE_SKILL_DIR}/../../scripts/chat-with-agent.bundle.js" --token-endpoint "<url>" "<follow-up>" --conversation-id "<id>" --directline-token "<token>" --watermark "<watermark>"
 ```
 
 - **`directline_token`** is bound to the conversation — do NOT fetch a new token. Always reuse from the previous response.

@@ -15,7 +15,7 @@ Query the Dataverse `bots` entity to determine whether the agent uses DirectLine
 1. Run the detect-only command:
 
    ```bash
-   node ${CLAUDE_SKILL_DIR}/../../scripts/chat-with-agent.bundle.js --detect-only $ARGUMENTS
+   node "${CLAUDE_SKILL_DIR}/../../scripts/chat-with-agent.bundle.js" --detect-only $ARGUMENTS
    ```
 
    If the agent is not at the project root, pass `--agent-dir <path>`.

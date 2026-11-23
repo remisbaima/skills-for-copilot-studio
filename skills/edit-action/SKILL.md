@@ -18,19 +18,19 @@ Help the user find the right connector and operation before they go to the UI. U
 When the connector IS available, use the lookup tool to help the user before they go to the UI:
 
 ```bash
-node ${CLAUDE_SKILL_DIR}/../../scripts/connector-lookup.bundle.js list                              # List connectors
-node ${CLAUDE_SKILL_DIR}/../../scripts/connector-lookup.bundle.js operations <connector>            # List operations
-node ${CLAUDE_SKILL_DIR}/../../scripts/connector-lookup.bundle.js operation <connector> <opId>      # Full input/output details
-node ${CLAUDE_SKILL_DIR}/../../scripts/connector-lookup.bundle.js search <keyword>                  # Search operations
+node "${CLAUDE_SKILL_DIR}/../../scripts/connector-lookup.bundle.js" list                              # List connectors
+node "${CLAUDE_SKILL_DIR}/../../scripts/connector-lookup.bundle.js" operations <connector>            # List operations
+node "${CLAUDE_SKILL_DIR}/../../scripts/connector-lookup.bundle.js" operation <connector> <opId>      # Full input/output details
+node "${CLAUDE_SKILL_DIR}/../../scripts/connector-lookup.bundle.js" search <keyword>                  # Search operations
 ```
 
 Use schema lookup for structural properties:
 
 ```bash
-node ${CLAUDE_SKILL_DIR}/../../scripts/schema-lookup.bundle.js summary TaskDialog
-node ${CLAUDE_SKILL_DIR}/../../scripts/schema-lookup.bundle.js summary InvokeConnectorTaskAction
-node ${CLAUDE_SKILL_DIR}/../../scripts/schema-lookup.bundle.js summary InvokeExternalAgentTaskAction
-node ${CLAUDE_SKILL_DIR}/../../scripts/schema-lookup.bundle.js summary ModelContextProtocolMetadata
+node "${CLAUDE_SKILL_DIR}/../../scripts/schema-lookup.bundle.js" summary TaskDialog
+node "${CLAUDE_SKILL_DIR}/../../scripts/schema-lookup.bundle.js" summary InvokeConnectorTaskAction
+node "${CLAUDE_SKILL_DIR}/../../scripts/schema-lookup.bundle.js" summary InvokeExternalAgentTaskAction
+node "${CLAUDE_SKILL_DIR}/../../scripts/schema-lookup.bundle.js" summary ModelContextProtocolMetadata
 ```
 
 ## Instructions
@@ -51,7 +51,7 @@ node ${CLAUDE_SKILL_DIR}/../../scripts/schema-lookup.bundle.js summary ModelCont
    - Read the action YAML to find `action.operationId` and the connector API name from `connectionreferences.mcs.yml`
    - Look up the full operation details (if the connector is available in the lookup script):
      ```bash
-     node ${CLAUDE_SKILL_DIR}/../../scripts/connector-lookup.bundle.js operation <connector> <operationId>
+     node "${CLAUDE_SKILL_DIR}/../../scripts/connector-lookup.bundle.js" operation <connector> <operationId>
      ```
    - This gives you the complete list of available inputs and outputs for the operation
    - If the connector is not found, try broader terms. If still not found, inform the user and proceed with edits based on the existing action YAML and schema-lookup only
@@ -160,7 +160,7 @@ node ${CLAUDE_SKILL_DIR}/../../scripts/schema-lookup.bundle.js summary ModelCont
 
 7. **Validate the edited file**:
    ```bash
-   node ${CLAUDE_SKILL_DIR}/../../scripts/schema-lookup.bundle.js validate <action-file-path>
+   node "${CLAUDE_SKILL_DIR}/../../scripts/schema-lookup.bundle.js" validate <action-file-path>
    ```
 
 8. **Inform the user** about next steps:

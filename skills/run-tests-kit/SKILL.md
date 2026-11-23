@@ -72,7 +72,7 @@ The user must have:
 
 3. **Run the test script in the background** with a 100-minute timeout (6000000ms):
    ```bash
-   node ${CLAUDE_SKILL_DIR}/../../tests/run-tests.js --config-dir ./tests
+   node "${CLAUDE_SKILL_DIR}/../../tests/run-tests.js" --config-dir ./tests
    ```
    Use `run_in_background: true` for this command. Save the returned task ID.
 

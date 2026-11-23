@@ -21,7 +21,7 @@ All eval-api commands run in the **foreground**. NEVER use `run_in_background`.
 ## Step 1: List test sets and let the user choose
 
 ```bash
-node ${CLAUDE_SKILL_DIR}/../../scripts/eval-api.bundle.js list-testsets --workspace <path> --client-id <id>
+node "${CLAUDE_SKILL_DIR}/../../scripts/eval-api.bundle.js" list-testsets --workspace <path> --client-id <id>
 ```
 
 - **No test sets found**: Tell the user to create one in Copilot Studio (Evaluate tab > New evaluation). Stop.
@@ -50,7 +50,7 @@ Ask the user:
 ## Step 3: Start the run
 
 ```bash
-node ${CLAUDE_SKILL_DIR}/../../scripts/eval-api.bundle.js start-run --workspace <path> --client-id <id> --testset-id <id> --run-name "Draft eval <date>"
+node "${CLAUDE_SKILL_DIR}/../../scripts/eval-api.bundle.js" start-run --workspace <path> --client-id <id> --testset-id <id> --run-name "Draft eval <date>"
 ```
 
 Add `--connection-id <id>` if the user provided a connection ID in Step 2.
@@ -60,7 +60,7 @@ Add `--published` only if the user explicitly asked for published-bot testing.
 ## Step 4: Poll until complete
 
 ```bash
-node ${CLAUDE_SKILL_DIR}/../../scripts/eval-api.bundle.js get-run --workspace <path> --client-id <id> --run-id <runId>
+node "${CLAUDE_SKILL_DIR}/../../scripts/eval-api.bundle.js" get-run --workspace <path> --client-id <id> --run-id <runId>
 ```
 
 Poll every 15-30 seconds. Report progress: "Processing: 3/10 test cases..."
@@ -70,7 +70,7 @@ Stop when `state` is `Completed`, `Failed`, `Abandoned`, or `Cancelled`.
 ## Step 5: Fetch and analyze results
 
 ```bash
-node ${CLAUDE_SKILL_DIR}/../../scripts/eval-api.bundle.js get-results --workspace <path> --client-id <id> --run-id <runId>
+node "${CLAUDE_SKILL_DIR}/../../scripts/eval-api.bundle.js" get-results --workspace <path> --client-id <id> --run-id <runId>
 ```
 
 Present a summary table (total, passed, failed, errors). For failures:

@@ -32,10 +32,10 @@ Generate a new Copilot Studio topic YAML file based on user requirements.
 
 3. **MANDATORY: Verify ALL `kind:` values against the schema** before writing them:
    ```bash
-   node ${CLAUDE_SKILL_DIR}/../../scripts/schema-lookup.bundle.js kinds                    # List all valid kind values
-   node ${CLAUDE_SKILL_DIR}/../../scripts/schema-lookup.bundle.js resolve AdaptiveDialog   # Resolve trigger structure
-   node ${CLAUDE_SKILL_DIR}/../../scripts/schema-lookup.bundle.js resolve <TriggerType>    # Resolve specific trigger
-   node ${CLAUDE_SKILL_DIR}/../../scripts/schema-lookup.bundle.js search <ActionKind>      # Verify an action kind exists
+   node "${CLAUDE_SKILL_DIR}/../../scripts/schema-lookup.bundle.js" kinds                    # List all valid kind values
+   node "${CLAUDE_SKILL_DIR}/../../scripts/schema-lookup.bundle.js" resolve AdaptiveDialog   # Resolve trigger structure
+   node "${CLAUDE_SKILL_DIR}/../../scripts/schema-lookup.bundle.js" resolve <TriggerType>    # Resolve specific trigger
+   node "${CLAUDE_SKILL_DIR}/../../scripts/schema-lookup.bundle.js" search <ActionKind>      # Verify an action kind exists
    ```
    **NEVER write a `kind:` value you haven't verified exists in the schema.** This is the #1 source of hallucination errors. If `schema-lookup.bundle.js search <kind>` returns no results, the kind does NOT exist — do not use it.
 
@@ -61,18 +61,13 @@ Generate a new Copilot Studio topic YAML file based on user requirements.
 
    **Step A: Schema validation** — always run this first:
    ```bash
-   node ${CLAUDE_SKILL_DIR}/../../scripts/schema-lookup.bundle.js validate <saved-file.yml>
+   node "${CLAUDE_SKILL_DIR}/../../scripts/schema-lookup.bundle.js" validate <saved-file.yml>
    ```
 
    **Step B: LSP-based validation** — also run this if the agent has `.mcs/conn.json`:
    Read `.mcs/conn.json` to get connection details, then:
    ```bash
-   node ${CLAUDE_SKILL_DIR}/../../scripts/manage-agent.bundle.js validate \
-     --workspace "<path-to-agent-folder>" \
-     --tenant-id "<tenantId>" \
-     --environment-id "<envId>" \
-     --environment-url "<envUrl>" \
-     --agent-mgmt-url "<mgmtUrl>"
+   node "${CLAUDE_SKILL_DIR}/../../scripts/manage-agent.bundle.js" validate --workspace "<path-to-agent-folder>" --tenant-id "<tenantId>" --environment-id "<envId>" --environment-url "<envUrl>" --agent-mgmt-url "<mgmtUrl>"
    ```
 
    Both validations are complementary: schema validation checks structural correctness (action kinds, property placement), while LSP validation checks Power Fx expressions, cross-file references, and environment-specific rules. If either fails, fix the issues before reporting success to the user.

@@ -19,8 +19,7 @@ Requires prior authentication via `/copilot-studio:test-auth`. Do NOT ask the us
 1. Run the script with `--client-id` and the utterance from `$ARGUMENTS`:
 
    ```bash
-   node ${CLAUDE_SKILL_DIR}/../../scripts/chat-with-agent.bundle.js \
-     --client-id "<clientId>" "<utterance>" [--agent-dir <path>]
+   node "${CLAUDE_SKILL_DIR}/../../scripts/chat-with-agent.bundle.js" --client-id "<clientId>" "<utterance>" [--agent-dir <path>]
    ```
 
 2. **Authentication**: Requires prior authentication via `/copilot-studio:test-auth`. The token is cached in the `"test-agent"` slot and shared with the eval API. If auth fails or the SDK hangs, tell the caller to re-run `test-auth`.
@@ -50,8 +49,7 @@ Display the agent's response from the `activities` array:
 Pass `--conversation-id` from the previous response:
 
 ```bash
-node ${CLAUDE_SKILL_DIR}/../../scripts/chat-with-agent.bundle.js \
-  --client-id "<id>" "<follow-up>" --conversation-id "<id>"
+node "${CLAUDE_SKILL_DIR}/../../scripts/chat-with-agent.bundle.js" --client-id "<id>" "<follow-up>" --conversation-id "<id>"
 ```
 
 SDK sessions do not expire as quickly as DirectLine. Reuse `conversation_id` automatically for follow-ups.
