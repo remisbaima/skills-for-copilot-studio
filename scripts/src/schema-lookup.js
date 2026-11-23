@@ -40,9 +40,10 @@ function getSchemaPath() {
   }
 
   if (!fs.existsSync(schemaPath)) {
-    console.error(`Error: Schema file not found at ${schemaPath}`);
-    console.error("Please place 'bot.schema.yaml-authoring.json' in the 'reference/' directory.");
-    process.exit(1);
+    throw new Error(
+      `Error: Schema file not found at ${schemaPath}\n` +
+        "Please place 'bot.schema.yaml-authoring.json' in the 'reference/' directory."
+    );
   }
 
   return schemaPath;
@@ -302,10 +303,12 @@ function formatDefinition(name, definition, compact) {
 
 // --- Validation ---
 
-function validateYamlFile(filepath, definitions) {
+function validateYaml(filepath, definitions) {
+  const messages = [];
+  const emit = (msg) => messages.push(msg);
+
   if (!fs.existsSync(filepath)) {
-    console.log(`[FAIL] File not found: ${filepath}`);
-    process.exit(1);
+    return { ok: false, passes: 0, warnings: 0, failures: 1, messages: [`[FAIL] File not found: ${filepath}`] };
   }
 
   let passes = 0;
@@ -318,96 +321,94 @@ function validateYamlFile(filepath, definitions) {
   try {
     data = yaml.load(rawText);
     if (data == null) {
-      console.log("[FAIL] File is empty or not valid YAML");
-      process.exit(1);
+      return { ok: false, passes: 0, warnings: 0, failures: 1, messages: ["[FAIL] File is empty or not valid YAML"] };
     }
-    console.log("[PASS] YAML parsing successful");
+    emit("[PASS] YAML parsing successful");
     passes++;
   } catch (e) {
-    console.log(`[FAIL] YAML parsing error: ${e.message}`);
-    process.exit(1);
+    return { ok: false, passes: 0, warnings: 0, failures: 1, messages: [`[FAIL] YAML parsing error: ${e.message}`] };
   }
 
   // 2. Kind detection
   const kind = data.kind;
   if (kind) {
-    console.log(`[PASS] Kind detected: ${kind}`);
+    emit(`[PASS] Kind detected: ${kind}`);
     passes++;
     const knownKinds = findKindValues(definitions);
     if (knownKinds.includes(kind)) {
-      console.log(`[PASS] Kind '${kind}' exists in schema`);
+      emit(`[PASS] Kind '${kind}' exists in schema`);
       passes++;
     } else {
-      console.log(`[WARN] Kind '${kind}' not found in schema kind values`);
+      emit(`[WARN] Kind '${kind}' not found in schema kind values`);
       warnings++;
     }
   } else {
-    console.log("[FAIL] No 'kind' property found at root level");
+    emit("[FAIL] No 'kind' property found at root level");
     failures++;
   }
 
   // 3. Required properties check based on kind
   if (kind === "AdaptiveDialog") {
     if (data.beginDialog) {
-      console.log("[PASS] Required 'beginDialog' property present");
+      emit("[PASS] Required 'beginDialog' property present");
       passes++;
       const bd = data.beginDialog;
       if (typeof bd === "object" && bd !== null) {
         if (bd.kind) {
-          console.log(`[PASS] beginDialog.kind: ${bd.kind}`);
+          emit(`[PASS] beginDialog.kind: ${bd.kind}`);
           passes++;
         } else {
-          console.log("[FAIL] beginDialog missing 'kind' property");
+          emit("[FAIL] beginDialog missing 'kind' property");
           failures++;
         }
         if (bd.id) {
-          console.log(`[PASS] beginDialog.id: ${bd.id}`);
+          emit(`[PASS] beginDialog.id: ${bd.id}`);
           passes++;
         } else {
-          console.log("[FAIL] beginDialog missing 'id' property");
+          emit("[FAIL] beginDialog missing 'id' property");
           failures++;
         }
       }
     } else {
-      console.log("[FAIL] AdaptiveDialog missing required 'beginDialog' property");
+      emit("[FAIL] AdaptiveDialog missing required 'beginDialog' property");
       failures++;
     }
   } else if (kind === "GptComponentMetadata") {
     for (const prop of ["displayName", "instructions"]) {
       if (data[prop]) {
-        console.log(`[PASS] Required '${prop}' property present`);
+        emit(`[PASS] Required '${prop}' property present`);
         passes++;
       } else {
-        console.log(`[WARN] Missing '${prop}' property (recommended)`);
+        emit(`[WARN] Missing '${prop}' property (recommended)`);
         warnings++;
       }
     }
   } else if (kind === "KnowledgeSourceConfiguration") {
     if (data.source) {
-      console.log("[PASS] Required 'source' property present");
+      emit("[PASS] Required 'source' property present");
       passes++;
     } else {
-      console.log("[FAIL] Missing required 'source' property");
+      emit("[FAIL] Missing required 'source' property");
       failures++;
     }
   } else if (kind === "AgentDialog") {
     // AgentDialog (child agent) validation
     if (data.beginDialog) {
-      console.log("[PASS] Required 'beginDialog' property present");
+      emit("[PASS] Required 'beginDialog' property present");
       passes++;
       const bd = data.beginDialog;
       if (bd.kind === "OnToolSelected") {
-        console.log("[PASS] beginDialog.kind: OnToolSelected");
+        emit("[PASS] beginDialog.kind: OnToolSelected");
         passes++;
       } else {
-        console.log(`[WARN] beginDialog.kind is '${bd.kind}' — expected 'OnToolSelected' for child agents`);
+        emit(`[WARN] beginDialog.kind is '${bd.kind}' — expected 'OnToolSelected' for child agents`);
         warnings++;
       }
       if (bd.description) {
-        console.log("[PASS] beginDialog.description present (used by parent orchestrator for routing)");
+        emit("[PASS] beginDialog.description present (used by parent orchestrator for routing)");
         passes++;
       } else {
-        console.log("[WARN] beginDialog.description missing — the parent orchestrator needs this to know when to route to this child agent");
+        emit("[WARN] beginDialog.description missing — the parent orchestrator needs this to know when to route to this child agent");
         warnings++;
       }
       // AgentDialog must NOT have actions — child agents use generative orchestration
@@ -415,21 +416,21 @@ function validateYamlFile(filepath, definitions) {
         const actionKinds = bd.actions
           .filter((a) => a && a.kind)
           .map((a) => a.kind);
-        console.log(`[FAIL] AgentDialog must NOT have beginDialog.actions (found ${bd.actions.length}: ${actionKinds.join(", ")}). Child agents use generative orchestration via settings.instructions — they cannot contain hardcoded action nodes like Question, SendActivity, BeginDialog, etc. Remove the actions array and define the agent's behavior in settings.instructions instead.`);
+        emit(`[FAIL] AgentDialog must NOT have beginDialog.actions (found ${bd.actions.length}: ${actionKinds.join(", ")}). Child agents use generative orchestration via settings.instructions — they cannot contain hardcoded action nodes like Question, SendActivity, BeginDialog, etc. Remove the actions array and define the agent's behavior in settings.instructions instead.`);
         failures++;
       } else {
-        console.log("[PASS] No hardcoded actions in beginDialog (correct for AgentDialog)");
+        emit("[PASS] No hardcoded actions in beginDialog (correct for AgentDialog)");
         passes++;
       }
     } else {
-      console.log("[FAIL] AgentDialog missing required 'beginDialog' property");
+      emit("[FAIL] AgentDialog missing required 'beginDialog' property");
       failures++;
     }
     if (data.settings && data.settings.instructions) {
-      console.log("[PASS] settings.instructions present");
+      emit("[PASS] settings.instructions present");
       passes++;
     } else {
-      console.log("[WARN] Missing settings.instructions — child agents need instructions for generative orchestration");
+      emit("[WARN] Missing settings.instructions — child agents need instructions for generative orchestration");
       warnings++;
     }
   }
@@ -448,7 +449,7 @@ function validateYamlFile(filepath, definitions) {
             if (validActionKinds.includes(action.kind)) {
               passes++;
             } else {
-              console.log(
+              emit(
                 `[FAIL] '${action.kind}' is not a valid action kind inside beginDialog.actions ` +
                 `(not found in DialogAction schema definition). ` +
                 `Use 'schema-lookup.bundle.js resolve DialogAction' to see valid action kinds.`
@@ -469,7 +470,7 @@ function validateYamlFile(filepath, definitions) {
       for (const key of Object.keys(bd)) {
         if (key === "kind" || key === "id") continue;
         if (!triggerProps.has(key) && rootProps.has(key)) {
-          console.log(
+          emit(
             `[FAIL] '${key}' is inside beginDialog but belongs at the ${kind} root level ` +
             `(not a valid property of ${triggerKind}, but is a property of ${kind}). ` +
             `Move '${key}' to the top level of the YAML.`
@@ -502,21 +503,21 @@ function validateYamlFile(filepath, definitions) {
 
   if (duplicates.size > 0) {
     for (const dup of [...duplicates].sort()) {
-      console.log(`[FAIL] Duplicate ID found: ${dup}`);
+      emit(`[FAIL] Duplicate ID found: ${dup}`);
       failures++;
     }
   } else if (idsFound.length > 0) {
-    console.log(`[PASS] All ${idsFound.length} node IDs are unique`);
+    emit(`[PASS] All ${idsFound.length} node IDs are unique`);
     passes++;
   }
 
   // 5. _REPLACE placeholder check
   const replaceCount = (rawText.match(/_REPLACE/g) || []).length;
   if (replaceCount > 0) {
-    console.log(`[FAIL] Found ${replaceCount} unresolved '_REPLACE' placeholder(s)`);
+    emit(`[FAIL] Found ${replaceCount} unresolved '_REPLACE' placeholder(s)`);
     failures++;
   } else {
-    console.log("[PASS] No '_REPLACE' placeholders remaining");
+    emit("[PASS] No '_REPLACE' placeholders remaining");
     passes++;
   }
 
@@ -541,11 +542,11 @@ function validateYamlFile(filepath, definitions) {
   const pfxIssues = checkPowerfx(data, "");
   if (pfxIssues.length > 0) {
     for (const issue of pfxIssues) {
-      console.log(`[WARN] Possible missing '=' prefix: ${issue}`);
+      emit(`[WARN] Possible missing '=' prefix: ${issue}`);
       warnings++;
     }
   } else {
-    console.log("[PASS] No Power Fx prefix issues detected");
+    emit("[PASS] No Power Fx prefix issues detected");
     passes++;
   }
 
@@ -576,11 +577,11 @@ function validateYamlFile(filepath, definitions) {
   const varIssues = checkVariables(data);
   if (varIssues.length > 0) {
     for (const issue of varIssues) {
-      console.log(`[WARN] ${issue}`);
+      emit(`[WARN] ${issue}`);
       warnings++;
     }
   } else {
-    console.log("[PASS] Variable scopes look correct");
+    emit("[PASS] Variable scopes look correct");
     passes++;
   }
 
@@ -601,25 +602,31 @@ function validateYamlFile(filepath, definitions) {
       [...inputNames].every((n) => inputTypeProps.has(n));
 
     if (setsEqual) {
-      console.log("[PASS] inputs and inputType.properties are consistent");
+      emit("[PASS] inputs and inputType.properties are consistent");
       passes++;
     } else {
       const missingInType = [...inputNames].filter((n) => !inputTypeProps.has(n));
       const missingInInputs = [...inputTypeProps].filter((n) => !inputNames.has(n));
       if (missingInType.length > 0) {
-        console.log(`[WARN] inputs defined but missing from inputType: {${missingInType.join(", ")}}`);
+        emit(`[WARN] inputs defined but missing from inputType: {${missingInType.join(", ")}}`);
         warnings++;
       }
       if (missingInInputs.length > 0) {
-        console.log(`[WARN] inputType properties missing from inputs: {${missingInInputs.join(", ")}}`);
+        emit(`[WARN] inputType properties missing from inputs: {${missingInInputs.join(", ")}}`);
         warnings++;
       }
     }
   }
 
   // Summary
-  console.log(`\nSummary: ${passes} passed, ${warnings} warnings, ${failures} failures`);
-  if (failures > 0) process.exit(1);
+  emit(`\nSummary: ${passes} passed, ${warnings} warnings, ${failures} failures`);
+  return { ok: failures === 0, passes, warnings, failures, messages };
+}
+
+function validateYamlFile(filepath, definitions) {
+  const result = validateYaml(filepath, definitions);
+  for (const line of result.messages) console.log(line);
+  if (!result.ok) process.exit(1);
 }
 
 // --- Adaptive Cards schema ---
@@ -635,8 +642,7 @@ function getAdaptiveCardSchemaPath() {
   }
 
   if (!fs.existsSync(schemaPath)) {
-    console.error(`Error: Adaptive Card schema not found at ${schemaPath}`);
-    process.exit(1);
+    throw new Error(`Error: Adaptive Card schema not found at ${schemaPath}`);
   }
 
   return schemaPath;
@@ -692,10 +698,11 @@ function main() {
     process.exit(0);
   }
 
-  const schema = loadSchema();
-  const definitions = getDefinitions(schema);
+  try {
+    const schema = loadSchema();
+    const definitions = getDefinitions(schema);
 
-  switch (command) {
+    switch (command) {
     case "lookup": {
       if (args.length < 2) {
         console.error("Error: Please provide a definition name");
@@ -870,11 +877,28 @@ function main() {
       break;
     }
 
-    default:
-      console.error(`Unknown command: ${command}`);
-      printHelp();
-      process.exit(1);
+      default:
+        console.error(`Unknown command: ${command}`);
+        printHelp();
+        process.exit(1);
+    }
+  } catch (err) {
+    console.error(err.message || String(err));
+    process.exit(1);
   }
 }
 
-main();
+module.exports = {
+  yaml,
+  loadSchema,
+  getDefinitions,
+  getValidKindsFromOneOf,
+  validateYaml,
+  validateYamlFile,
+  loadAdaptiveCardSchema,
+  getAdaptiveCardDefinitions,
+};
+
+if (require.main === module) {
+  main();
+}

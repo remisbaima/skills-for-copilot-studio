@@ -31,9 +31,10 @@ function getConnectorsDir() {
   }
 
   if (!fs.existsSync(dir)) {
-    console.error(`Error: Connectors directory not found at ${dir}`);
-    console.error("Please place connector YAML files in 'reference/connectors/'.");
-    process.exit(1);
+    throw new Error(
+      `Error: Connectors directory not found at ${dir}\n` +
+        "Please place connector YAML files in 'reference/connectors/'."
+    );
   }
 
   return dir;
@@ -297,47 +298,59 @@ function main() {
     process.exit(0);
   }
 
-  switch (command) {
-    case "list":
-      cmdList();
-      break;
+  try {
+    switch (command) {
+      case "list":
+        cmdList();
+        break;
 
-    case "operations": {
-      if (args.length < 2) {
-        console.error("Error: Please provide a connector name");
-        console.error("Usage: node connector-lookup.bundle.js operations <connector>");
-        process.exit(1);
+      case "operations": {
+        if (args.length < 2) {
+          console.error("Error: Please provide a connector name");
+          console.error("Usage: node connector-lookup.bundle.js operations <connector>");
+          process.exit(1);
+        }
+        cmdOperations(args[1]);
+        break;
       }
-      cmdOperations(args[1]);
-      break;
-    }
 
-    case "operation": {
-      if (args.length < 3) {
-        console.error("Error: Please provide a connector name and operation ID");
-        console.error("Usage: node connector-lookup.bundle.js operation <connector> <operationId>");
-        process.exit(1);
+      case "operation": {
+        if (args.length < 3) {
+          console.error("Error: Please provide a connector name and operation ID");
+          console.error("Usage: node connector-lookup.bundle.js operation <connector> <operationId>");
+          process.exit(1);
+        }
+        cmdOperation(args[1], args[2]);
+        break;
       }
-      cmdOperation(args[1], args[2]);
-      break;
-    }
 
-    case "search": {
-      if (args.length < 2) {
-        console.error("Error: Please provide a search keyword");
-        console.error("Usage: node connector-lookup.bundle.js search <keyword>");
-        process.exit(1);
+      case "search": {
+        if (args.length < 2) {
+          console.error("Error: Please provide a search keyword");
+          console.error("Usage: node connector-lookup.bundle.js search <keyword>");
+          process.exit(1);
+        }
+        // Join remaining args to support multi-word searches
+        cmdSearch(args.slice(1).join(" "));
+        break;
       }
-      // Join remaining args to support multi-word searches
-      cmdSearch(args.slice(1).join(" "));
-      break;
-    }
 
-    default:
-      console.error(`Unknown command: ${command}`);
-      printHelp();
-      process.exit(1);
+      default:
+        console.error(`Unknown command: ${command}`);
+        printHelp();
+        process.exit(1);
+    }
+  } catch (err) {
+    console.error(err.message || String(err));
+    process.exit(1);
   }
 }
 
-main();
+module.exports = {
+  listConnectorFiles,
+  loadConnector,
+};
+
+if (require.main === module) {
+  main();
+}

@@ -34,6 +34,7 @@ const os = require("os");
 const { log, die, sleep } = require("./shared-utils");
 const { validateTenantId, validateAgentId, validateDataverseUrl } = require("./dataverse-validation");
 const {
+  CAPABILITIES,
   VSCODE_CLIENT_ID,
   getIslandResourceId,
   buildTokenInfo,
@@ -164,6 +165,9 @@ function parseArgs() {
         break;
       case "--non-interactive":
         parsed.nonInteractive = true;
+        break;
+      case "--capabilities":
+        parsed.command = "capabilities";
         break;
       case "--url":
         parsed.url = args[++i];
@@ -1456,6 +1460,11 @@ async function cmdClone(args) {
 
 async function main() {
   const args = parseArgs();
+
+  if (args.command === "capabilities") {
+    process.stdout.write(JSON.stringify({ status: "ok", capabilities: CAPABILITIES }) + "\n");
+    process.exit(0);
+  }
 
   try {
     if (args.tenantId) validateTenantId(args.tenantId);
