@@ -254,4 +254,10 @@ test("Antigravity manifest and root hooks stay aligned", () => {
     assert.equal(handler.type, "command");
     assert.equal(typeof handler.command, "string");
   }
+  const setupHandler = sessionStart.find((h) => h.command.includes("hooks/setup.js"));
+  assert.ok(setupHandler, "SessionStart must include hooks/setup.js handler");
+  assert.ok(
+    typeof setupHandler.timeout === "number" && setupHandler.timeout >= 120,
+    "hooks/setup.js handler must set timeout >= 120s for first-run npm install"
+  );
 });
