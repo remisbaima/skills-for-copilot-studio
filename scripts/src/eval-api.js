@@ -22,6 +22,7 @@
  *   --published              Test published bot (default: test draft)
  *   --run-name <name>        Custom display name for the evaluation run
  *   --connection-id <id>     MCS connection ID for authenticated execution (knowledge sources / tools)
+ *   --non-interactive        Fail fast instead of opening interactive login (or set CPS_NON_INTERACTIVE=1)
  *
  * Output: JSON on stdout, diagnostics on stderr.
  * Exit codes: 0 = success, 1 = error
@@ -32,6 +33,7 @@ const path = require("path");
 const { log, die } = require("./shared-utils");
 const {
   VSCODE_CLIENT_ID,
+  assertInteractiveAllowed,
   acquireTokenSilent,
   acquireTokenInteractive,
   getOrAcquireToken,
@@ -55,6 +57,7 @@ function parseArgs() {
     published: false,
     runName: null,
     connectionId: null,
+    nonInteractive: false,
   };
 
   for (let i = 0; i < args.length; i++) {
@@ -89,12 +92,19 @@ function parseArgs() {
       case "--connection-id":
         parsed.connectionId = args[++i];
         break;
+      case "--non-interactive":
+        parsed.nonInteractive = true;
+        break;
       default:
         if (!args[i].startsWith("--") && !parsed.command) {
           parsed.command = args[i];
         }
         break;
     }
+  }
+
+  if (parsed.nonInteractive) {
+    process.env.CPS_NON_INTERACTIVE = "1";
   }
 
   if (!parsed.command) {
@@ -188,7 +198,8 @@ async function getToken(config) {
     return silent.accessToken;
   }
 
-  // No cached token — use interactive browser login
+  // No cached token — fail fast in non-interactive mode, otherwise use interactive browser login
+  assertInteractiveAllowed([PP_API_SCOPE], "interactive");
   log("No cached token — starting interactive login...");
   const token = await acquireTokenInteractive(config.tenantId, clientId, [PP_API_SCOPE], cacheSlot);
   return token.accessToken;

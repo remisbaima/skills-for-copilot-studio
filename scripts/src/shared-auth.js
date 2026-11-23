@@ -118,10 +118,29 @@ function buildTokenInfo(result) {
 }
 
 // ---------------------------------------------------------------------------
+// Non-interactive guard
+// ---------------------------------------------------------------------------
+
+function isNonInteractiveAuth() {
+  const value = String(process.env.CPS_NON_INTERACTIVE || "").trim().toLowerCase();
+  return value === "1" || value === "true";
+}
+
+function assertInteractiveAllowed(scopes, flow) {
+  if (!isNonInteractiveAuth()) return;
+  const scopeHint = Array.isArray(scopes) && scopes[0] ? ` for ${scopes[0]}` : "";
+  throw new Error(
+    `Failed to acquire MSAL token${scopeHint} in non-interactive mode (${flow} login disabled). ` +
+      "Authenticate interactively first (e.g., 'manage-agent auth' or 'eval-api auth')."
+  );
+}
+
+// ---------------------------------------------------------------------------
 // Token acquisition flows
 // ---------------------------------------------------------------------------
 
 async function acquireTokenDeviceCode(tenantId, clientId, scopes, cacheSlot) {
+  assertInteractiveAllowed(scopes, "device-code");
   const app = await createMsalApp(tenantId, clientId, cacheSlot);
 
   const result = await app.acquireTokenByDeviceCode({
@@ -148,6 +167,7 @@ async function acquireTokenDeviceCode(tenantId, clientId, scopes, cacheSlot) {
 }
 
 async function acquireTokenInteractive(tenantId, clientId, scopes, cacheSlot) {
+  assertInteractiveAllowed(scopes, "interactive");
   const app = await createMsalApp(tenantId, clientId, cacheSlot);
 
   const result = await app.acquireTokenInteractive({
@@ -199,6 +219,7 @@ async function getOrAcquireToken(tenantId, clientId, scopes, label, cacheSlot) {
     log(`${label}: using cached token (expires ${silent.expiresOn})`);
     return silent;
   }
+  assertInteractiveAllowed(scopes, "interactive");
   log(`${label}: starting interactive login...`);
   return acquireTokenInteractive(tenantId, clientId, scopes, cacheSlot);
 }
@@ -225,6 +246,8 @@ module.exports = {
   getIslandResourceId,
   createMsalApp,
   buildTokenInfo,
+  isNonInteractiveAuth,
+  assertInteractiveAllowed,
   acquireTokenDeviceCode,
   acquireTokenInteractive,
   acquireTokenSilent,
