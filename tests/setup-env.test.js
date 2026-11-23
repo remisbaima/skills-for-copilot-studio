@@ -12,6 +12,34 @@ function tempDirectory(t) {
   return directory;
 }
 
+function seedInstalledNativeDeps(dataDir) {
+  const nativeDepsPath = path.join(__dirname, "../scripts/native-deps.json");
+  const raw = fs.readFileSync(nativeDepsPath, "utf8");
+  fs.mkdirSync(dataDir, { recursive: true });
+  fs.writeFileSync(path.join(dataDir, "package.json"), raw);
+  for (const pkg of Object.keys(JSON.parse(raw).dependencies || {})) {
+    const pkgDir = path.join(dataDir, "node_modules", ...pkg.split("/"));
+    fs.mkdirSync(pkgDir, { recursive: true });
+    fs.writeFileSync(path.join(pkgDir, "package.json"), JSON.stringify({ name: pkg, version: "0.0.0" }));
+  }
+}
+
+function createFakeNpmBin(binDir, { exitCode = 0 } = {}) {
+  fs.mkdirSync(binDir, { recursive: true });
+  if (process.platform === "win32") {
+    const shim = exitCode === 0
+      ? "@echo off\r\nexit /b 0\r\n"
+      : `@echo off\r\necho simulated npm failure 1>&2\r\nexit /b ${exitCode}\r\n`;
+    fs.writeFileSync(path.join(binDir, "npm.cmd"), shim);
+  } else {
+    const shim = exitCode === 0
+      ? "#!/bin/sh\nexit 0\n"
+      : `#!/bin/sh\necho "simulated npm failure" >&2\nexit ${exitCode}\n`;
+    const target = path.join(binDir, "npm");
+    fs.writeFileSync(target, shim, { mode: 0o755 });
+  }
+}
+
 test("shell literals quote every character rather than interpolating shell syntax", () => {
   assert.equal(shellQuote("a'b"), "'a'\\''b'");
   assert.equal(shellQuote('$(unexecuted) `unexecuted` "$HOME";\\\n'), '\'$(unexecuted) `unexecuted` "$HOME";\\\n\'');
@@ -56,8 +84,7 @@ test("environment file can be created but cannot be relative, a directory, or a 
 test("setup keeps Copilot data fallback, plugin-path registry, and optional persistence", (t) => {
   const directory = tempDirectory(t);
   const data = path.join(directory, "plugin data'$HOME");
-  fs.mkdirSync(data);
-  fs.copyFileSync(path.join(__dirname, "../scripts/native-deps.json"), path.join(data, "package.json"));
+  seedInstalledNativeDeps(data);
   const envFile = path.join(directory, "session.env");
   const environment = {
     ...process.env, HOME: directory, USERPROFILE: directory,
@@ -79,8 +106,7 @@ test("setup keeps Copilot data fallback, plugin-path registry, and optional pers
 test("setup supports Antigravity PLUGIN_DATA and emits valid JSON stdout", (t) => {
   const directory = tempDirectory(t);
   const data = path.join(directory, "agy-plugin-data");
-  fs.mkdirSync(data);
-  fs.copyFileSync(path.join(__dirname, "../scripts/native-deps.json"), path.join(data, "package.json"));
+  seedInstalledNativeDeps(data);
   const repoRoot = path.resolve(__dirname, "..");
 
   const withData = spawnSync(process.execPath, [path.join(__dirname, "../hooks/setup.js"), "--antigravity"], {
@@ -123,6 +149,46 @@ test("setup supports Antigravity PLUGIN_DATA and emits valid JSON stdout", (t) =
   assert.equal(withoutData.status, 0, withoutData.stderr);
   assert.deepEqual(JSON.parse(withoutData.stdout), {});
   assert.equal(fs.existsSync(path.join(emptyHome, ".copilot-studio-cli/plugin-paths.json")), false);
+});
+
+test("setup retries when node_modules are missing and cleans up package.json on npm failure", (t) => {
+  const directory = tempDirectory(t);
+  const data = path.join(directory, "broken-plugin-data");
+  const fakeBin = path.join(directory, "fake-bin");
+  fs.mkdirSync(data, { recursive: true });
+  // Simulate a previously wedged install: package.json matches native-deps.json, but node_modules is missing.
+  fs.copyFileSync(path.join(__dirname, "../scripts/native-deps.json"), path.join(data, "package.json"));
+  createFakeNpmBin(fakeBin, { exitCode: 1 });
+
+  const envBase = {
+    ...process.env,
+    PATH: `${fakeBin}${path.delimiter}${process.env.PATH || ""}`,
+    HOME: directory,
+    USERPROFILE: directory,
+    CLAUDE_PLUGIN_DATA: "",
+    COPILOT_PLUGIN_DATA: "",
+    CLAUDE_ENV_FILE: "",
+    PLUGIN_DATA: data,
+  };
+
+  const failed = spawnSync(process.execPath, [path.join(__dirname, "../hooks/setup.js"), "--antigravity"], {
+    env: envBase,
+    encoding: "utf8",
+  });
+  assert.notEqual(failed.status, 0, "setup should attempt npm install and fail when node_modules are missing");
+  assert.equal(fs.existsSync(path.join(data, "package.json")), false, "failed npm install must remove package.json so next run retries");
+  assert.equal(fs.existsSync(path.join(directory, ".copilot-studio-cli/plugin-paths.json")), false);
+
+  // Once npm succeeds, setup completes and writes plugin-paths.json.
+  createFakeNpmBin(fakeBin, { exitCode: 0 });
+  const recovered = spawnSync(process.execPath, [path.join(__dirname, "../hooks/setup.js"), "--antigravity"], {
+    env: envBase,
+    encoding: "utf8",
+  });
+  assert.equal(recovered.status, 0, recovered.stderr);
+  assert.deepEqual(JSON.parse(recovered.stdout), {});
+  assert.equal(fs.existsSync(path.join(data, "package.json")), true);
+  assert.equal(fs.existsSync(path.join(directory, ".copilot-studio-cli/plugin-paths.json")), true);
 });
 
 test("print-prompt outputs host-appropriate formats for Claude Code, Copilot CLI, and Antigravity", () => {
