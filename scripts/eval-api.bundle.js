@@ -14771,7 +14771,7 @@ var require_shared_auth = __commonJS({
           cache: { cachePlugin: plugin }
         });
       }
-      const key = `${tenantId}:${clientId}`;
+      const key = `${String(tenantId || "").toLowerCase()}:${clientId}`;
       if (_msalApps.has(key)) return _msalApps.get(key);
       const cachePlugin = await getDefaultCachePlugin();
       const app = new msal.PublicClientApplication({
@@ -14851,7 +14851,8 @@ var require_shared_auth = __commonJS({
     async function acquireTokenSilent2(tenantId, clientId, scopes, cacheSlot) {
       const app = await createMsalApp(tenantId, clientId, cacheSlot);
       const allAccounts = await app.getTokenCache().getAllAccounts();
-      const accounts = allAccounts.filter((a) => a.tenantId === tenantId);
+      const normalizedTenant = String(tenantId || "").toLowerCase();
+      const accounts = normalizedTenant ? allAccounts.filter((a) => String(a.tenantId || "").toLowerCase() === normalizedTenant) : [];
       if (accounts.length > 0) {
         try {
           const result = await app.acquireTokenSilent({
