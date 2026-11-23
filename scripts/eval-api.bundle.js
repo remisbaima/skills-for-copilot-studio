@@ -1,4 +1,4 @@
-var _d=process.env.CLAUDE_PLUGIN_DATA;if(!_d){try{_d=JSON.parse(require('fs').readFileSync(require('path').join(require('os').homedir(),'.copilot-studio-cli','plugin-paths.json'),'utf8')).pluginData}catch{}}if(_d){var _p=require('path');process.env.NODE_PATH=[_p.join(_d,'node_modules'),process.env.NODE_PATH].filter(Boolean).join(_p.delimiter);require('module')._initPaths()}
+var _d=process.env.CLAUDE_PLUGIN_DATA||process.env.COPILOT_PLUGIN_DATA||process.env.PLUGIN_DATA;if(!_d){try{_d=JSON.parse(require('fs').readFileSync(require('path').join(require('os').homedir(),'.copilot-studio-cli','plugin-paths.json'),'utf8')).pluginData}catch{}}if(_d){var _p=require('path');process.env.NODE_PATH=[_p.join(_d,'node_modules'),process.env.NODE_PATH].filter(Boolean).join(_p.delimiter);require('module')._initPaths()}
 var __create = Object.create;
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
@@ -240,7 +240,7 @@ var require_msal_cache = __commonJS({
   }
 });
 
-// node_modules/uuid/dist/esm-node/rng.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/uuid/dist/esm-node/rng.js
 function rng() {
   if (poolPtr > rnds8Pool.length - 16) {
     import_crypto.default.randomFillSync(rnds8Pool);
@@ -250,34 +250,34 @@ function rng() {
 }
 var import_crypto, rnds8Pool, poolPtr;
 var init_rng = __esm({
-  "node_modules/uuid/dist/esm-node/rng.js"() {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/uuid/dist/esm-node/rng.js"() {
     import_crypto = __toESM(require("crypto"));
     rnds8Pool = new Uint8Array(256);
     poolPtr = rnds8Pool.length;
   }
 });
 
-// node_modules/uuid/dist/esm-node/regex.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/uuid/dist/esm-node/regex.js
 var regex_default;
 var init_regex = __esm({
-  "node_modules/uuid/dist/esm-node/regex.js"() {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/uuid/dist/esm-node/regex.js"() {
     regex_default = /^(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|00000000-0000-0000-0000-000000000000)$/i;
   }
 });
 
-// node_modules/uuid/dist/esm-node/validate.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/uuid/dist/esm-node/validate.js
 function validate(uuid) {
   return typeof uuid === "string" && regex_default.test(uuid);
 }
 var validate_default;
 var init_validate = __esm({
-  "node_modules/uuid/dist/esm-node/validate.js"() {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/uuid/dist/esm-node/validate.js"() {
     init_regex();
     validate_default = validate;
   }
 });
 
-// node_modules/uuid/dist/esm-node/stringify.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/uuid/dist/esm-node/stringify.js
 function stringify(arr, offset = 0) {
   const uuid = (byteToHex[arr[offset + 0]] + byteToHex[arr[offset + 1]] + byteToHex[arr[offset + 2]] + byteToHex[arr[offset + 3]] + "-" + byteToHex[arr[offset + 4]] + byteToHex[arr[offset + 5]] + "-" + byteToHex[arr[offset + 6]] + byteToHex[arr[offset + 7]] + "-" + byteToHex[arr[offset + 8]] + byteToHex[arr[offset + 9]] + "-" + byteToHex[arr[offset + 10]] + byteToHex[arr[offset + 11]] + byteToHex[arr[offset + 12]] + byteToHex[arr[offset + 13]] + byteToHex[arr[offset + 14]] + byteToHex[arr[offset + 15]]).toLowerCase();
   if (!validate_default(uuid)) {
@@ -287,7 +287,7 @@ function stringify(arr, offset = 0) {
 }
 var byteToHex, stringify_default;
 var init_stringify = __esm({
-  "node_modules/uuid/dist/esm-node/stringify.js"() {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/uuid/dist/esm-node/stringify.js"() {
     init_validate();
     byteToHex = [];
     for (let i = 0; i < 256; ++i) {
@@ -297,7 +297,7 @@ var init_stringify = __esm({
   }
 });
 
-// node_modules/uuid/dist/esm-node/v1.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/uuid/dist/esm-node/v1.js
 function v1(options, buf, offset) {
   let i = buf && offset || 0;
   const b = buf || new Array(16);
@@ -348,7 +348,7 @@ function v1(options, buf, offset) {
 }
 var _nodeId, _clockseq, _lastMSecs, _lastNSecs, v1_default;
 var init_v1 = __esm({
-  "node_modules/uuid/dist/esm-node/v1.js"() {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/uuid/dist/esm-node/v1.js"() {
     init_rng();
     init_stringify();
     _lastMSecs = 0;
@@ -357,7 +357,7 @@ var init_v1 = __esm({
   }
 });
 
-// node_modules/uuid/dist/esm-node/parse.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/uuid/dist/esm-node/parse.js
 function parse(uuid) {
   if (!validate_default(uuid)) {
     throw TypeError("Invalid UUID");
@@ -384,13 +384,13 @@ function parse(uuid) {
 }
 var parse_default;
 var init_parse = __esm({
-  "node_modules/uuid/dist/esm-node/parse.js"() {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/uuid/dist/esm-node/parse.js"() {
     init_validate();
     parse_default = parse;
   }
 });
 
-// node_modules/uuid/dist/esm-node/v35.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/uuid/dist/esm-node/v35.js
 function stringToBytes(str) {
   str = unescape(encodeURIComponent(str));
   const bytes = [];
@@ -435,7 +435,7 @@ function v35_default(name, version2, hashfunc) {
 }
 var DNS, URL2;
 var init_v35 = __esm({
-  "node_modules/uuid/dist/esm-node/v35.js"() {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/uuid/dist/esm-node/v35.js"() {
     init_stringify();
     init_parse();
     DNS = "6ba7b810-9dad-11d1-80b4-00c04fd430c8";
@@ -443,7 +443,7 @@ var init_v35 = __esm({
   }
 });
 
-// node_modules/uuid/dist/esm-node/md5.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/uuid/dist/esm-node/md5.js
 function md5(bytes) {
   if (Array.isArray(bytes)) {
     bytes = Buffer.from(bytes);
@@ -454,16 +454,16 @@ function md5(bytes) {
 }
 var import_crypto2, md5_default;
 var init_md5 = __esm({
-  "node_modules/uuid/dist/esm-node/md5.js"() {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/uuid/dist/esm-node/md5.js"() {
     import_crypto2 = __toESM(require("crypto"));
     md5_default = md5;
   }
 });
 
-// node_modules/uuid/dist/esm-node/v3.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/uuid/dist/esm-node/v3.js
 var v3, v3_default;
 var init_v3 = __esm({
-  "node_modules/uuid/dist/esm-node/v3.js"() {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/uuid/dist/esm-node/v3.js"() {
     init_v35();
     init_md5();
     v3 = v35_default("v3", 48, md5_default);
@@ -471,7 +471,7 @@ var init_v3 = __esm({
   }
 });
 
-// node_modules/uuid/dist/esm-node/v4.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/uuid/dist/esm-node/v4.js
 function v4(options, buf, offset) {
   options = options || {};
   const rnds = options.random || (options.rng || rng)();
@@ -488,14 +488,14 @@ function v4(options, buf, offset) {
 }
 var v4_default;
 var init_v4 = __esm({
-  "node_modules/uuid/dist/esm-node/v4.js"() {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/uuid/dist/esm-node/v4.js"() {
     init_rng();
     init_stringify();
     v4_default = v4;
   }
 });
 
-// node_modules/uuid/dist/esm-node/sha1.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/uuid/dist/esm-node/sha1.js
 function sha1(bytes) {
   if (Array.isArray(bytes)) {
     bytes = Buffer.from(bytes);
@@ -506,16 +506,16 @@ function sha1(bytes) {
 }
 var import_crypto3, sha1_default;
 var init_sha1 = __esm({
-  "node_modules/uuid/dist/esm-node/sha1.js"() {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/uuid/dist/esm-node/sha1.js"() {
     import_crypto3 = __toESM(require("crypto"));
     sha1_default = sha1;
   }
 });
 
-// node_modules/uuid/dist/esm-node/v5.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/uuid/dist/esm-node/v5.js
 var v5, v5_default;
 var init_v5 = __esm({
-  "node_modules/uuid/dist/esm-node/v5.js"() {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/uuid/dist/esm-node/v5.js"() {
     init_v35();
     init_sha1();
     v5 = v35_default("v5", 80, sha1_default);
@@ -523,15 +523,15 @@ var init_v5 = __esm({
   }
 });
 
-// node_modules/uuid/dist/esm-node/nil.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/uuid/dist/esm-node/nil.js
 var nil_default;
 var init_nil = __esm({
-  "node_modules/uuid/dist/esm-node/nil.js"() {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/uuid/dist/esm-node/nil.js"() {
     nil_default = "00000000-0000-0000-0000-000000000000";
   }
 });
 
-// node_modules/uuid/dist/esm-node/version.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/uuid/dist/esm-node/version.js
 function version(uuid) {
   if (!validate_default(uuid)) {
     throw TypeError("Invalid UUID");
@@ -540,13 +540,13 @@ function version(uuid) {
 }
 var version_default;
 var init_version = __esm({
-  "node_modules/uuid/dist/esm-node/version.js"() {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/uuid/dist/esm-node/version.js"() {
     init_validate();
     version_default = version;
   }
 });
 
-// node_modules/uuid/dist/esm-node/index.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/uuid/dist/esm-node/index.js
 var esm_node_exports = {};
 __export(esm_node_exports, {
   NIL: () => nil_default,
@@ -560,7 +560,7 @@ __export(esm_node_exports, {
   version: () => version_default
 });
 var init_esm_node = __esm({
-  "node_modules/uuid/dist/esm-node/index.js"() {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/uuid/dist/esm-node/index.js"() {
     init_v1();
     init_v3();
     init_v4();
@@ -573,9 +573,9 @@ var init_esm_node = __esm({
   }
 });
 
-// node_modules/safe-buffer/index.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/safe-buffer/index.js
 var require_safe_buffer = __commonJS({
-  "node_modules/safe-buffer/index.js"(exports2, module2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/safe-buffer/index.js"(exports2, module2) {
     var buffer = require("buffer");
     var Buffer3 = buffer.Buffer;
     function copyProps(src, dst) {
@@ -631,9 +631,9 @@ var require_safe_buffer = __commonJS({
   }
 });
 
-// node_modules/jws/lib/data-stream.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/jws/lib/data-stream.js
 var require_data_stream = __commonJS({
-  "node_modules/jws/lib/data-stream.js"(exports2, module2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/jws/lib/data-stream.js"(exports2, module2) {
     var Buffer3 = require_safe_buffer().Buffer;
     var Stream = require("stream");
     var util = require("util");
@@ -679,9 +679,9 @@ var require_data_stream = __commonJS({
   }
 });
 
-// node_modules/ecdsa-sig-formatter/src/param-bytes-for-alg.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/ecdsa-sig-formatter/src/param-bytes-for-alg.js
 var require_param_bytes_for_alg = __commonJS({
-  "node_modules/ecdsa-sig-formatter/src/param-bytes-for-alg.js"(exports2, module2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/ecdsa-sig-formatter/src/param-bytes-for-alg.js"(exports2, module2) {
     "use strict";
     function getParamSize(keySize) {
       var result = (keySize / 8 | 0) + (keySize % 8 === 0 ? 0 : 1);
@@ -703,9 +703,9 @@ var require_param_bytes_for_alg = __commonJS({
   }
 });
 
-// node_modules/ecdsa-sig-formatter/src/ecdsa-sig-formatter.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/ecdsa-sig-formatter/src/ecdsa-sig-formatter.js
 var require_ecdsa_sig_formatter = __commonJS({
-  "node_modules/ecdsa-sig-formatter/src/ecdsa-sig-formatter.js"(exports2, module2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/ecdsa-sig-formatter/src/ecdsa-sig-formatter.js"(exports2, module2) {
     "use strict";
     var Buffer3 = require_safe_buffer().Buffer;
     var getParamBytesForAlg = require_param_bytes_for_alg();
@@ -843,9 +843,9 @@ var require_ecdsa_sig_formatter = __commonJS({
   }
 });
 
-// node_modules/buffer-equal-constant-time/index.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/buffer-equal-constant-time/index.js
 var require_buffer_equal_constant_time = __commonJS({
-  "node_modules/buffer-equal-constant-time/index.js"(exports2, module2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/buffer-equal-constant-time/index.js"(exports2, module2) {
     "use strict";
     var Buffer3 = require("buffer").Buffer;
     var SlowBuffer = require("buffer").SlowBuffer;
@@ -877,9 +877,9 @@ var require_buffer_equal_constant_time = __commonJS({
   }
 });
 
-// node_modules/jwa/index.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/jwa/index.js
 var require_jwa = __commonJS({
-  "node_modules/jwa/index.js"(exports2, module2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/jwa/index.js"(exports2, module2) {
     var Buffer3 = require_safe_buffer().Buffer;
     var crypto4 = require("crypto");
     var formatEcdsa = require_ecdsa_sig_formatter();
@@ -1101,9 +1101,9 @@ var require_jwa = __commonJS({
   }
 });
 
-// node_modules/jws/lib/tostring.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/jws/lib/tostring.js
 var require_tostring = __commonJS({
-  "node_modules/jws/lib/tostring.js"(exports2, module2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/jws/lib/tostring.js"(exports2, module2) {
     var Buffer3 = require("buffer").Buffer;
     module2.exports = function toString(obj) {
       if (typeof obj === "string")
@@ -1115,9 +1115,9 @@ var require_tostring = __commonJS({
   }
 });
 
-// node_modules/jws/lib/sign-stream.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/jws/lib/sign-stream.js
 var require_sign_stream = __commonJS({
-  "node_modules/jws/lib/sign-stream.js"(exports2, module2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/jws/lib/sign-stream.js"(exports2, module2) {
     var Buffer3 = require_safe_buffer().Buffer;
     var DataStream = require_data_stream();
     var jwa = require_jwa();
@@ -1190,9 +1190,9 @@ var require_sign_stream = __commonJS({
   }
 });
 
-// node_modules/jws/lib/verify-stream.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/jws/lib/verify-stream.js
 var require_verify_stream = __commonJS({
-  "node_modules/jws/lib/verify-stream.js"(exports2, module2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/jws/lib/verify-stream.js"(exports2, module2) {
     var Buffer3 = require_safe_buffer().Buffer;
     var DataStream = require_data_stream();
     var jwa = require_jwa();
@@ -1305,9 +1305,9 @@ var require_verify_stream = __commonJS({
   }
 });
 
-// node_modules/jws/index.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/jws/index.js
 var require_jws = __commonJS({
-  "node_modules/jws/index.js"(exports2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/jws/index.js"(exports2) {
     var SignStream = require_sign_stream();
     var VerifyStream = require_verify_stream();
     var ALGORITHMS = [
@@ -1338,9 +1338,9 @@ var require_jws = __commonJS({
   }
 });
 
-// node_modules/jsonwebtoken/decode.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/jsonwebtoken/decode.js
 var require_decode = __commonJS({
-  "node_modules/jsonwebtoken/decode.js"(exports2, module2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/jsonwebtoken/decode.js"(exports2, module2) {
     var jws = require_jws();
     module2.exports = function(jwt, options) {
       options = options || {};
@@ -1370,9 +1370,9 @@ var require_decode = __commonJS({
   }
 });
 
-// node_modules/jsonwebtoken/lib/JsonWebTokenError.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/jsonwebtoken/lib/JsonWebTokenError.js
 var require_JsonWebTokenError = __commonJS({
-  "node_modules/jsonwebtoken/lib/JsonWebTokenError.js"(exports2, module2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/jsonwebtoken/lib/JsonWebTokenError.js"(exports2, module2) {
     var JsonWebTokenError = function(message, error) {
       Error.call(this, message);
       if (Error.captureStackTrace) {
@@ -1388,9 +1388,9 @@ var require_JsonWebTokenError = __commonJS({
   }
 });
 
-// node_modules/jsonwebtoken/lib/NotBeforeError.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/jsonwebtoken/lib/NotBeforeError.js
 var require_NotBeforeError = __commonJS({
-  "node_modules/jsonwebtoken/lib/NotBeforeError.js"(exports2, module2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/jsonwebtoken/lib/NotBeforeError.js"(exports2, module2) {
     var JsonWebTokenError = require_JsonWebTokenError();
     var NotBeforeError = function(message, date) {
       JsonWebTokenError.call(this, message);
@@ -1403,9 +1403,9 @@ var require_NotBeforeError = __commonJS({
   }
 });
 
-// node_modules/jsonwebtoken/lib/TokenExpiredError.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/jsonwebtoken/lib/TokenExpiredError.js
 var require_TokenExpiredError = __commonJS({
-  "node_modules/jsonwebtoken/lib/TokenExpiredError.js"(exports2, module2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/jsonwebtoken/lib/TokenExpiredError.js"(exports2, module2) {
     var JsonWebTokenError = require_JsonWebTokenError();
     var TokenExpiredError = function(message, expiredAt) {
       JsonWebTokenError.call(this, message);
@@ -1418,9 +1418,9 @@ var require_TokenExpiredError = __commonJS({
   }
 });
 
-// node_modules/ms/index.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/ms/index.js
 var require_ms = __commonJS({
-  "node_modules/ms/index.js"(exports2, module2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/ms/index.js"(exports2, module2) {
     var s = 1e3;
     var m = s * 60;
     var h = m * 60;
@@ -1534,9 +1534,9 @@ var require_ms = __commonJS({
   }
 });
 
-// node_modules/jsonwebtoken/lib/timespan.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/jsonwebtoken/lib/timespan.js
 var require_timespan = __commonJS({
-  "node_modules/jsonwebtoken/lib/timespan.js"(exports2, module2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/jsonwebtoken/lib/timespan.js"(exports2, module2) {
     var ms = require_ms();
     module2.exports = function(time, iat) {
       var timestamp = iat || Math.floor(Date.now() / 1e3);
@@ -1555,9 +1555,9 @@ var require_timespan = __commonJS({
   }
 });
 
-// node_modules/semver/internal/constants.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/internal/constants.js
 var require_constants = __commonJS({
-  "node_modules/semver/internal/constants.js"(exports2, module2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/internal/constants.js"(exports2, module2) {
     "use strict";
     var SEMVER_SPEC_VERSION = "2.0.0";
     var MAX_LENGTH = 256;
@@ -1587,9 +1587,9 @@ var require_constants = __commonJS({
   }
 });
 
-// node_modules/semver/internal/debug.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/internal/debug.js
 var require_debug = __commonJS({
-  "node_modules/semver/internal/debug.js"(exports2, module2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/internal/debug.js"(exports2, module2) {
     "use strict";
     var debug = typeof process === "object" && process.env && process.env.NODE_DEBUG && /\bsemver\b/i.test(process.env.NODE_DEBUG) ? (...args) => console.error("SEMVER", ...args) : () => {
     };
@@ -1597,9 +1597,9 @@ var require_debug = __commonJS({
   }
 });
 
-// node_modules/semver/internal/re.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/internal/re.js
 var require_re = __commonJS({
-  "node_modules/semver/internal/re.js"(exports2, module2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/internal/re.js"(exports2, module2) {
     "use strict";
     var {
       MAX_SAFE_COMPONENT_LENGTH,
@@ -1685,9 +1685,9 @@ var require_re = __commonJS({
   }
 });
 
-// node_modules/semver/internal/parse-options.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/internal/parse-options.js
 var require_parse_options = __commonJS({
-  "node_modules/semver/internal/parse-options.js"(exports2, module2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/internal/parse-options.js"(exports2, module2) {
     "use strict";
     var looseOption = Object.freeze({ loose: true });
     var emptyOpts = Object.freeze({});
@@ -1704,9 +1704,9 @@ var require_parse_options = __commonJS({
   }
 });
 
-// node_modules/semver/internal/identifiers.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/internal/identifiers.js
 var require_identifiers = __commonJS({
-  "node_modules/semver/internal/identifiers.js"(exports2, module2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/internal/identifiers.js"(exports2, module2) {
     "use strict";
     var numeric = /^[0-9]+$/;
     var compareIdentifiers = (a, b) => {
@@ -1729,9 +1729,9 @@ var require_identifiers = __commonJS({
   }
 });
 
-// node_modules/semver/classes/semver.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/classes/semver.js
 var require_semver = __commonJS({
-  "node_modules/semver/classes/semver.js"(exports2, module2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/classes/semver.js"(exports2, module2) {
     "use strict";
     var debug = require_debug();
     var { MAX_LENGTH, MAX_SAFE_INTEGER } = require_constants();
@@ -2008,9 +2008,9 @@ var require_semver = __commonJS({
   }
 });
 
-// node_modules/semver/functions/parse.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/functions/parse.js
 var require_parse = __commonJS({
-  "node_modules/semver/functions/parse.js"(exports2, module2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/functions/parse.js"(exports2, module2) {
     "use strict";
     var SemVer = require_semver();
     var parse2 = (version2, options, throwErrors = false) => {
@@ -2030,9 +2030,9 @@ var require_parse = __commonJS({
   }
 });
 
-// node_modules/semver/functions/valid.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/functions/valid.js
 var require_valid = __commonJS({
-  "node_modules/semver/functions/valid.js"(exports2, module2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/functions/valid.js"(exports2, module2) {
     "use strict";
     var parse2 = require_parse();
     var valid = (version2, options) => {
@@ -2043,9 +2043,9 @@ var require_valid = __commonJS({
   }
 });
 
-// node_modules/semver/functions/clean.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/functions/clean.js
 var require_clean = __commonJS({
-  "node_modules/semver/functions/clean.js"(exports2, module2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/functions/clean.js"(exports2, module2) {
     "use strict";
     var parse2 = require_parse();
     var clean = (version2, options) => {
@@ -2056,9 +2056,9 @@ var require_clean = __commonJS({
   }
 });
 
-// node_modules/semver/functions/inc.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/functions/inc.js
 var require_inc = __commonJS({
-  "node_modules/semver/functions/inc.js"(exports2, module2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/functions/inc.js"(exports2, module2) {
     "use strict";
     var SemVer = require_semver();
     var inc = (version2, release, options, identifier, identifierBase) => {
@@ -2080,9 +2080,9 @@ var require_inc = __commonJS({
   }
 });
 
-// node_modules/semver/functions/diff.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/functions/diff.js
 var require_diff = __commonJS({
-  "node_modules/semver/functions/diff.js"(exports2, module2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/functions/diff.js"(exports2, module2) {
     "use strict";
     var parse2 = require_parse();
     var diff = (version1, version2) => {
@@ -2124,9 +2124,9 @@ var require_diff = __commonJS({
   }
 });
 
-// node_modules/semver/functions/major.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/functions/major.js
 var require_major = __commonJS({
-  "node_modules/semver/functions/major.js"(exports2, module2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/functions/major.js"(exports2, module2) {
     "use strict";
     var SemVer = require_semver();
     var major = (a, loose) => new SemVer(a, loose).major;
@@ -2134,9 +2134,9 @@ var require_major = __commonJS({
   }
 });
 
-// node_modules/semver/functions/minor.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/functions/minor.js
 var require_minor = __commonJS({
-  "node_modules/semver/functions/minor.js"(exports2, module2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/functions/minor.js"(exports2, module2) {
     "use strict";
     var SemVer = require_semver();
     var minor = (a, loose) => new SemVer(a, loose).minor;
@@ -2144,9 +2144,9 @@ var require_minor = __commonJS({
   }
 });
 
-// node_modules/semver/functions/patch.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/functions/patch.js
 var require_patch = __commonJS({
-  "node_modules/semver/functions/patch.js"(exports2, module2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/functions/patch.js"(exports2, module2) {
     "use strict";
     var SemVer = require_semver();
     var patch = (a, loose) => new SemVer(a, loose).patch;
@@ -2154,9 +2154,9 @@ var require_patch = __commonJS({
   }
 });
 
-// node_modules/semver/functions/prerelease.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/functions/prerelease.js
 var require_prerelease = __commonJS({
-  "node_modules/semver/functions/prerelease.js"(exports2, module2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/functions/prerelease.js"(exports2, module2) {
     "use strict";
     var parse2 = require_parse();
     var prerelease = (version2, options) => {
@@ -2167,9 +2167,9 @@ var require_prerelease = __commonJS({
   }
 });
 
-// node_modules/semver/functions/compare.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/functions/compare.js
 var require_compare = __commonJS({
-  "node_modules/semver/functions/compare.js"(exports2, module2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/functions/compare.js"(exports2, module2) {
     "use strict";
     var SemVer = require_semver();
     var compare = (a, b, loose) => new SemVer(a, loose).compare(new SemVer(b, loose));
@@ -2177,9 +2177,9 @@ var require_compare = __commonJS({
   }
 });
 
-// node_modules/semver/functions/rcompare.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/functions/rcompare.js
 var require_rcompare = __commonJS({
-  "node_modules/semver/functions/rcompare.js"(exports2, module2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/functions/rcompare.js"(exports2, module2) {
     "use strict";
     var compare = require_compare();
     var rcompare = (a, b, loose) => compare(b, a, loose);
@@ -2187,9 +2187,9 @@ var require_rcompare = __commonJS({
   }
 });
 
-// node_modules/semver/functions/compare-loose.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/functions/compare-loose.js
 var require_compare_loose = __commonJS({
-  "node_modules/semver/functions/compare-loose.js"(exports2, module2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/functions/compare-loose.js"(exports2, module2) {
     "use strict";
     var compare = require_compare();
     var compareLoose = (a, b) => compare(a, b, true);
@@ -2197,9 +2197,9 @@ var require_compare_loose = __commonJS({
   }
 });
 
-// node_modules/semver/functions/compare-build.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/functions/compare-build.js
 var require_compare_build = __commonJS({
-  "node_modules/semver/functions/compare-build.js"(exports2, module2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/functions/compare-build.js"(exports2, module2) {
     "use strict";
     var SemVer = require_semver();
     var compareBuild = (a, b, loose) => {
@@ -2211,9 +2211,9 @@ var require_compare_build = __commonJS({
   }
 });
 
-// node_modules/semver/functions/sort.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/functions/sort.js
 var require_sort = __commonJS({
-  "node_modules/semver/functions/sort.js"(exports2, module2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/functions/sort.js"(exports2, module2) {
     "use strict";
     var compareBuild = require_compare_build();
     var sort = (list, loose) => list.sort((a, b) => compareBuild(a, b, loose));
@@ -2221,9 +2221,9 @@ var require_sort = __commonJS({
   }
 });
 
-// node_modules/semver/functions/rsort.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/functions/rsort.js
 var require_rsort = __commonJS({
-  "node_modules/semver/functions/rsort.js"(exports2, module2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/functions/rsort.js"(exports2, module2) {
     "use strict";
     var compareBuild = require_compare_build();
     var rsort = (list, loose) => list.sort((a, b) => compareBuild(b, a, loose));
@@ -2231,9 +2231,9 @@ var require_rsort = __commonJS({
   }
 });
 
-// node_modules/semver/functions/gt.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/functions/gt.js
 var require_gt = __commonJS({
-  "node_modules/semver/functions/gt.js"(exports2, module2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/functions/gt.js"(exports2, module2) {
     "use strict";
     var compare = require_compare();
     var gt = (a, b, loose) => compare(a, b, loose) > 0;
@@ -2241,9 +2241,9 @@ var require_gt = __commonJS({
   }
 });
 
-// node_modules/semver/functions/lt.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/functions/lt.js
 var require_lt = __commonJS({
-  "node_modules/semver/functions/lt.js"(exports2, module2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/functions/lt.js"(exports2, module2) {
     "use strict";
     var compare = require_compare();
     var lt = (a, b, loose) => compare(a, b, loose) < 0;
@@ -2251,9 +2251,9 @@ var require_lt = __commonJS({
   }
 });
 
-// node_modules/semver/functions/eq.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/functions/eq.js
 var require_eq = __commonJS({
-  "node_modules/semver/functions/eq.js"(exports2, module2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/functions/eq.js"(exports2, module2) {
     "use strict";
     var compare = require_compare();
     var eq = (a, b, loose) => compare(a, b, loose) === 0;
@@ -2261,9 +2261,9 @@ var require_eq = __commonJS({
   }
 });
 
-// node_modules/semver/functions/neq.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/functions/neq.js
 var require_neq = __commonJS({
-  "node_modules/semver/functions/neq.js"(exports2, module2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/functions/neq.js"(exports2, module2) {
     "use strict";
     var compare = require_compare();
     var neq = (a, b, loose) => compare(a, b, loose) !== 0;
@@ -2271,9 +2271,9 @@ var require_neq = __commonJS({
   }
 });
 
-// node_modules/semver/functions/gte.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/functions/gte.js
 var require_gte = __commonJS({
-  "node_modules/semver/functions/gte.js"(exports2, module2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/functions/gte.js"(exports2, module2) {
     "use strict";
     var compare = require_compare();
     var gte = (a, b, loose) => compare(a, b, loose) >= 0;
@@ -2281,9 +2281,9 @@ var require_gte = __commonJS({
   }
 });
 
-// node_modules/semver/functions/lte.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/functions/lte.js
 var require_lte = __commonJS({
-  "node_modules/semver/functions/lte.js"(exports2, module2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/functions/lte.js"(exports2, module2) {
     "use strict";
     var compare = require_compare();
     var lte = (a, b, loose) => compare(a, b, loose) <= 0;
@@ -2291,9 +2291,9 @@ var require_lte = __commonJS({
   }
 });
 
-// node_modules/semver/functions/cmp.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/functions/cmp.js
 var require_cmp = __commonJS({
-  "node_modules/semver/functions/cmp.js"(exports2, module2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/functions/cmp.js"(exports2, module2) {
     "use strict";
     var eq = require_eq();
     var neq = require_neq();
@@ -2341,9 +2341,9 @@ var require_cmp = __commonJS({
   }
 });
 
-// node_modules/semver/functions/coerce.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/functions/coerce.js
 var require_coerce = __commonJS({
-  "node_modules/semver/functions/coerce.js"(exports2, module2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/functions/coerce.js"(exports2, module2) {
     "use strict";
     var SemVer = require_semver();
     var parse2 = require_parse();
@@ -2387,9 +2387,9 @@ var require_coerce = __commonJS({
   }
 });
 
-// node_modules/semver/internal/lrucache.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/internal/lrucache.js
 var require_lrucache = __commonJS({
-  "node_modules/semver/internal/lrucache.js"(exports2, module2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/internal/lrucache.js"(exports2, module2) {
     "use strict";
     var LRUCache = class {
       constructor() {
@@ -2425,9 +2425,9 @@ var require_lrucache = __commonJS({
   }
 });
 
-// node_modules/semver/classes/range.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/classes/range.js
 var require_range = __commonJS({
-  "node_modules/semver/classes/range.js"(exports2, module2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/classes/range.js"(exports2, module2) {
     "use strict";
     var SPACE_CHARACTERS = /\s+/g;
     var Range = class _Range {
@@ -2802,9 +2802,9 @@ var require_range = __commonJS({
   }
 });
 
-// node_modules/semver/classes/comparator.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/classes/comparator.js
 var require_comparator = __commonJS({
-  "node_modules/semver/classes/comparator.js"(exports2, module2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/classes/comparator.js"(exports2, module2) {
     "use strict";
     var ANY = Symbol("SemVer ANY");
     var Comparator = class _Comparator {
@@ -2915,9 +2915,9 @@ var require_comparator = __commonJS({
   }
 });
 
-// node_modules/semver/functions/satisfies.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/functions/satisfies.js
 var require_satisfies = __commonJS({
-  "node_modules/semver/functions/satisfies.js"(exports2, module2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/functions/satisfies.js"(exports2, module2) {
     "use strict";
     var Range = require_range();
     var satisfies = (version2, range, options) => {
@@ -2932,9 +2932,9 @@ var require_satisfies = __commonJS({
   }
 });
 
-// node_modules/semver/ranges/to-comparators.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/ranges/to-comparators.js
 var require_to_comparators = __commonJS({
-  "node_modules/semver/ranges/to-comparators.js"(exports2, module2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/ranges/to-comparators.js"(exports2, module2) {
     "use strict";
     var Range = require_range();
     var toComparators = (range, options) => new Range(range, options).set.map((comp) => comp.map((c) => c.value).join(" ").trim().split(" "));
@@ -2942,9 +2942,9 @@ var require_to_comparators = __commonJS({
   }
 });
 
-// node_modules/semver/ranges/max-satisfying.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/ranges/max-satisfying.js
 var require_max_satisfying = __commonJS({
-  "node_modules/semver/ranges/max-satisfying.js"(exports2, module2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/ranges/max-satisfying.js"(exports2, module2) {
     "use strict";
     var SemVer = require_semver();
     var Range = require_range();
@@ -2971,9 +2971,9 @@ var require_max_satisfying = __commonJS({
   }
 });
 
-// node_modules/semver/ranges/min-satisfying.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/ranges/min-satisfying.js
 var require_min_satisfying = __commonJS({
-  "node_modules/semver/ranges/min-satisfying.js"(exports2, module2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/ranges/min-satisfying.js"(exports2, module2) {
     "use strict";
     var SemVer = require_semver();
     var Range = require_range();
@@ -3000,9 +3000,9 @@ var require_min_satisfying = __commonJS({
   }
 });
 
-// node_modules/semver/ranges/min-version.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/ranges/min-version.js
 var require_min_version = __commonJS({
-  "node_modules/semver/ranges/min-version.js"(exports2, module2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/ranges/min-version.js"(exports2, module2) {
     "use strict";
     var SemVer = require_semver();
     var Range = require_range();
@@ -3059,9 +3059,9 @@ var require_min_version = __commonJS({
   }
 });
 
-// node_modules/semver/ranges/valid.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/ranges/valid.js
 var require_valid2 = __commonJS({
-  "node_modules/semver/ranges/valid.js"(exports2, module2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/ranges/valid.js"(exports2, module2) {
     "use strict";
     var Range = require_range();
     var validRange = (range, options) => {
@@ -3075,9 +3075,9 @@ var require_valid2 = __commonJS({
   }
 });
 
-// node_modules/semver/ranges/outside.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/ranges/outside.js
 var require_outside = __commonJS({
-  "node_modules/semver/ranges/outside.js"(exports2, module2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/ranges/outside.js"(exports2, module2) {
     "use strict";
     var SemVer = require_semver();
     var Comparator = require_comparator();
@@ -3144,9 +3144,9 @@ var require_outside = __commonJS({
   }
 });
 
-// node_modules/semver/ranges/gtr.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/ranges/gtr.js
 var require_gtr = __commonJS({
-  "node_modules/semver/ranges/gtr.js"(exports2, module2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/ranges/gtr.js"(exports2, module2) {
     "use strict";
     var outside = require_outside();
     var gtr = (version2, range, options) => outside(version2, range, ">", options);
@@ -3154,9 +3154,9 @@ var require_gtr = __commonJS({
   }
 });
 
-// node_modules/semver/ranges/ltr.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/ranges/ltr.js
 var require_ltr = __commonJS({
-  "node_modules/semver/ranges/ltr.js"(exports2, module2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/ranges/ltr.js"(exports2, module2) {
     "use strict";
     var outside = require_outside();
     var ltr = (version2, range, options) => outside(version2, range, "<", options);
@@ -3164,9 +3164,9 @@ var require_ltr = __commonJS({
   }
 });
 
-// node_modules/semver/ranges/intersects.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/ranges/intersects.js
 var require_intersects = __commonJS({
-  "node_modules/semver/ranges/intersects.js"(exports2, module2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/ranges/intersects.js"(exports2, module2) {
     "use strict";
     var Range = require_range();
     var intersects = (r1, r2, options) => {
@@ -3178,9 +3178,9 @@ var require_intersects = __commonJS({
   }
 });
 
-// node_modules/semver/ranges/simplify.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/ranges/simplify.js
 var require_simplify = __commonJS({
-  "node_modules/semver/ranges/simplify.js"(exports2, module2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/ranges/simplify.js"(exports2, module2) {
     "use strict";
     var satisfies = require_satisfies();
     var compare = require_compare();
@@ -3228,9 +3228,9 @@ var require_simplify = __commonJS({
   }
 });
 
-// node_modules/semver/ranges/subset.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/ranges/subset.js
 var require_subset = __commonJS({
-  "node_modules/semver/ranges/subset.js"(exports2, module2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/ranges/subset.js"(exports2, module2) {
     "use strict";
     var Range = require_range();
     var Comparator = require_comparator();
@@ -3390,9 +3390,9 @@ var require_subset = __commonJS({
   }
 });
 
-// node_modules/semver/index.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/index.js
 var require_semver2 = __commonJS({
-  "node_modules/semver/index.js"(exports2, module2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/semver/index.js"(exports2, module2) {
     "use strict";
     var internalRe = require_re();
     var constants = require_constants();
@@ -3485,25 +3485,25 @@ var require_semver2 = __commonJS({
   }
 });
 
-// node_modules/jsonwebtoken/lib/asymmetricKeyDetailsSupported.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/jsonwebtoken/lib/asymmetricKeyDetailsSupported.js
 var require_asymmetricKeyDetailsSupported = __commonJS({
-  "node_modules/jsonwebtoken/lib/asymmetricKeyDetailsSupported.js"(exports2, module2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/jsonwebtoken/lib/asymmetricKeyDetailsSupported.js"(exports2, module2) {
     var semver = require_semver2();
     module2.exports = semver.satisfies(process.version, ">=15.7.0");
   }
 });
 
-// node_modules/jsonwebtoken/lib/rsaPssKeyDetailsSupported.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/jsonwebtoken/lib/rsaPssKeyDetailsSupported.js
 var require_rsaPssKeyDetailsSupported = __commonJS({
-  "node_modules/jsonwebtoken/lib/rsaPssKeyDetailsSupported.js"(exports2, module2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/jsonwebtoken/lib/rsaPssKeyDetailsSupported.js"(exports2, module2) {
     var semver = require_semver2();
     module2.exports = semver.satisfies(process.version, ">=16.9.0");
   }
 });
 
-// node_modules/jsonwebtoken/lib/validateAsymmetricKey.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/jsonwebtoken/lib/validateAsymmetricKey.js
 var require_validateAsymmetricKey = __commonJS({
-  "node_modules/jsonwebtoken/lib/validateAsymmetricKey.js"(exports2, module2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/jsonwebtoken/lib/validateAsymmetricKey.js"(exports2, module2) {
     var ASYMMETRIC_KEY_DETAILS_SUPPORTED = require_asymmetricKeyDetailsSupported();
     var RSA_PSS_KEY_DETAILS_SUPPORTED = require_rsaPssKeyDetailsSupported();
     var allowedAlgorithmsForKeys = {
@@ -3554,17 +3554,17 @@ var require_validateAsymmetricKey = __commonJS({
   }
 });
 
-// node_modules/jsonwebtoken/lib/psSupported.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/jsonwebtoken/lib/psSupported.js
 var require_psSupported = __commonJS({
-  "node_modules/jsonwebtoken/lib/psSupported.js"(exports2, module2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/jsonwebtoken/lib/psSupported.js"(exports2, module2) {
     var semver = require_semver2();
     module2.exports = semver.satisfies(process.version, "^6.12.0 || >=8.0.0");
   }
 });
 
-// node_modules/jsonwebtoken/verify.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/jsonwebtoken/verify.js
 var require_verify = __commonJS({
-  "node_modules/jsonwebtoken/verify.js"(exports2, module2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/jsonwebtoken/verify.js"(exports2, module2) {
     var JsonWebTokenError = require_JsonWebTokenError();
     var NotBeforeError = require_NotBeforeError();
     var TokenExpiredError = require_TokenExpiredError();
@@ -3777,9 +3777,9 @@ var require_verify = __commonJS({
   }
 });
 
-// node_modules/lodash.includes/index.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/lodash.includes/index.js
 var require_lodash = __commonJS({
-  "node_modules/lodash.includes/index.js"(exports2, module2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/lodash.includes/index.js"(exports2, module2) {
     var INFINITY = 1 / 0;
     var MAX_SAFE_INTEGER = 9007199254740991;
     var MAX_INTEGER = 17976931348623157e292;
@@ -3961,9 +3961,9 @@ var require_lodash = __commonJS({
   }
 });
 
-// node_modules/lodash.isboolean/index.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/lodash.isboolean/index.js
 var require_lodash2 = __commonJS({
-  "node_modules/lodash.isboolean/index.js"(exports2, module2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/lodash.isboolean/index.js"(exports2, module2) {
     var boolTag = "[object Boolean]";
     var objectProto = Object.prototype;
     var objectToString = objectProto.toString;
@@ -3977,9 +3977,9 @@ var require_lodash2 = __commonJS({
   }
 });
 
-// node_modules/lodash.isinteger/index.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/lodash.isinteger/index.js
 var require_lodash3 = __commonJS({
-  "node_modules/lodash.isinteger/index.js"(exports2, module2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/lodash.isinteger/index.js"(exports2, module2) {
     var INFINITY = 1 / 0;
     var MAX_INTEGER = 17976931348623157e292;
     var NAN = 0 / 0;
@@ -4041,9 +4041,9 @@ var require_lodash3 = __commonJS({
   }
 });
 
-// node_modules/lodash.isnumber/index.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/lodash.isnumber/index.js
 var require_lodash4 = __commonJS({
-  "node_modules/lodash.isnumber/index.js"(exports2, module2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/lodash.isnumber/index.js"(exports2, module2) {
     var numberTag = "[object Number]";
     var objectProto = Object.prototype;
     var objectToString = objectProto.toString;
@@ -4057,9 +4057,9 @@ var require_lodash4 = __commonJS({
   }
 });
 
-// node_modules/lodash.isplainobject/index.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/lodash.isplainobject/index.js
 var require_lodash5 = __commonJS({
-  "node_modules/lodash.isplainobject/index.js"(exports2, module2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/lodash.isplainobject/index.js"(exports2, module2) {
     var objectTag = "[object Object]";
     function isHostObject(value) {
       var result = false;
@@ -4101,9 +4101,9 @@ var require_lodash5 = __commonJS({
   }
 });
 
-// node_modules/lodash.isstring/index.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/lodash.isstring/index.js
 var require_lodash6 = __commonJS({
-  "node_modules/lodash.isstring/index.js"(exports2, module2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/lodash.isstring/index.js"(exports2, module2) {
     var stringTag = "[object String]";
     var objectProto = Object.prototype;
     var objectToString = objectProto.toString;
@@ -4118,9 +4118,9 @@ var require_lodash6 = __commonJS({
   }
 });
 
-// node_modules/lodash.once/index.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/lodash.once/index.js
 var require_lodash7 = __commonJS({
-  "node_modules/lodash.once/index.js"(exports2, module2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/lodash.once/index.js"(exports2, module2) {
     var FUNC_ERROR_TEXT = "Expected a function";
     var INFINITY = 1 / 0;
     var MAX_INTEGER = 17976931348623157e292;
@@ -4199,9 +4199,9 @@ var require_lodash7 = __commonJS({
   }
 });
 
-// node_modules/jsonwebtoken/sign.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/jsonwebtoken/sign.js
 var require_sign = __commonJS({
-  "node_modules/jsonwebtoken/sign.js"(exports2, module2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/jsonwebtoken/sign.js"(exports2, module2) {
     var timespan = require_timespan();
     var PS_SUPPORTED = require_psSupported();
     var validateAsymmetricKey = require_validateAsymmetricKey();
@@ -4424,9 +4424,9 @@ var require_sign = __commonJS({
   }
 });
 
-// node_modules/jsonwebtoken/index.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/jsonwebtoken/index.js
 var require_jsonwebtoken = __commonJS({
-  "node_modules/jsonwebtoken/index.js"(exports2, module2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/jsonwebtoken/index.js"(exports2, module2) {
     module2.exports = {
       decode: require_decode(),
       verify: require_verify(),
@@ -4438,9 +4438,9 @@ var require_jsonwebtoken = __commonJS({
   }
 });
 
-// node_modules/@azure/msal-node/lib/msal-node.cjs
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/@azure/msal-node/lib/msal-node.cjs
 var require_msal_node = __commonJS({
-  "node_modules/@azure/msal-node/lib/msal-node.cjs"(exports2) {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/@azure/msal-node/lib/msal-node.cjs"(exports2) {
     "use strict";
     var uuid = (init_esm_node(), __toCommonJS(esm_node_exports));
     var crypto4 = require("crypto");
@@ -4523,7 +4523,8 @@ var require_msal_node = __commonJS({
             refresh_on: atEntity.refreshOn,
             key_id: atEntity.keyId,
             token_type: atEntity.tokenType,
-            userAssertionHash: atEntity.userAssertionHash
+            userAssertionHash: atEntity.userAssertionHash,
+            resource: atEntity.resource
           };
         });
         return accessTokens;
@@ -4798,6 +4799,8 @@ var require_msal_node = __commonJS({
     var BROKER_CLIENT_ID = "brk_client_id";
     var BROKER_REDIRECT_URI = "brk_redirect_uri";
     var INSTANCE_AWARE = "instance_aware";
+    var RESOURCE = "resource";
+    var CLI_DATA = "clidata";
     function getDefaultErrorMessage(code) {
       return `See https://aka.ms/msal.js.errors#${code} for details`;
     }
@@ -4992,6 +4995,8 @@ var require_msal_node = __commonJS({
     var methodNotImplemented = "method_not_implemented";
     var nestedAppAuthBridgeDisabled = "nested_app_auth_bridge_disabled";
     var platformBrokerError = "platform_broker_error";
+    var resourceParameterRequired = "resource_parameter_required";
+    var misplacedResourceParam = "misplaced_resource_parameter";
     var ClientAuthErrorCodes = /* @__PURE__ */ Object.freeze({
       __proto__: null,
       authTimeNotFound,
@@ -5011,6 +5016,7 @@ var require_msal_node = __commonJS({
       keyIdMissing,
       maxAgeTranspired,
       methodNotImplemented,
+      misplacedResourceParam,
       multipleMatchingAppMetadata,
       multipleMatchingTokens,
       nestedAppAuthBridgeDisabled,
@@ -5024,6 +5030,7 @@ var require_msal_node = __commonJS({
       openIdConfigError,
       platformBrokerError,
       requestCannotBeMade,
+      resourceParameterRequired,
       stateMismatch,
       stateNotFound,
       tokenClaimsCnfRequiredForSignedJwt,
@@ -5252,14 +5259,17 @@ var require_msal_node = __commonJS({
     function addSid(parameters, sid) {
       parameters.set(SID, sid);
     }
-    function addClaims(parameters, claims, clientCapabilities) {
-      const mergedClaims = addClientCapabilitiesToClaims(claims, clientCapabilities);
-      try {
-        JSON.parse(mergedClaims);
-      } catch (e) {
-        throw createClientConfigurationError(invalidClaims);
+    function addClaims(parameters, claims, clientCapabilities, skipBrokerClaims) {
+      const configClaims = skipBrokerClaims && parameters.has(BROKER_CLIENT_ID) ? void 0 : clientCapabilities;
+      if (!StringUtils.isEmptyObj(claims) || configClaims && configClaims.length > 0) {
+        const mergedClaims = addClientCapabilitiesToClaims(claims, configClaims);
+        try {
+          JSON.parse(mergedClaims);
+        } catch (e) {
+          throw createClientConfigurationError(invalidClaims);
+        }
+        parameters.set(CLAIMS, mergedClaims);
       }
-      parameters.set(CLAIMS, mergedClaims);
     }
     function addCorrelationId(parameters, correlationId) {
       parameters.set(CLIENT_REQUEST_ID, correlationId);
@@ -5338,6 +5348,9 @@ var require_msal_node = __commonJS({
     function addClientInfo(parameters) {
       parameters.set(CLIENT_INFO, "1");
     }
+    function addCliData(parameters) {
+      parameters.set(CLI_DATA, "1");
+    }
     function addInstanceAware(parameters) {
       if (!parameters.has(INSTANCE_AWARE)) {
         parameters.set(INSTANCE_AWARE, "true");
@@ -5405,6 +5418,11 @@ var require_msal_node = __commonJS({
       }
       if (!parameters.has(BROKER_REDIRECT_URI)) {
         parameters.set(BROKER_REDIRECT_URI, brokerRedirectUri);
+      }
+    }
+    function addResource(parameters, resource) {
+      if (resource) {
+        parameters.set(RESOURCE, resource);
       }
     }
     function stripLeadingHashOrQuery(responseString) {
@@ -5691,7 +5709,7 @@ var require_msal_node = __commonJS({
       }
     };
     var name$1 = "@azure/msal-common";
-    var version$1 = "16.2.0";
+    var version$1 = "16.5.1";
     var AzureCloudInstance = {
       // AzureCloudInstance is not specified.
       None: "none",
@@ -5719,7 +5737,8 @@ var require_msal_node = __commonJS({
           name: name2,
           username: preferred_username || upn || "",
           loginHint: login_hint,
-          isHomeTenant: tenantIdMatchesHomeTenant(tenantId2, homeAccountId)
+          isHomeTenant: tenantIdMatchesHomeTenant(tenantId2, homeAccountId),
+          upn
         };
       } else {
         return {
@@ -6218,6 +6237,10 @@ var require_msal_node = __commonJS({
        * Gets first tenanted AccountInfo object found based on provided filters
        */
       getAccountInfoFilteredBy(accountFilter, correlationId) {
+        if (Object.keys(accountFilter).length === 0 || Object.values(accountFilter).every((value) => value === null || value === void 0 || value === "")) {
+          this.commonLogger.warning("getAccountInfoFilteredBy: Account filter is empty or invalid, returning null", correlationId);
+          return null;
+        }
         const allAccounts = this.getAllAccounts(accountFilter, correlationId);
         if (allAccounts.length > 1) {
           const sortedAccounts = allAccounts.sort((account) => {
@@ -6306,6 +6329,15 @@ var require_msal_node = __commonJS({
         if (tenantProfileFilter.isHomeTenant !== void 0 && !(tenantProfile.isHomeTenant === tenantProfileFilter.isHomeTenant)) {
           return false;
         }
+        if (!!tenantProfileFilter.username && !(this.matchUsername(tenantProfile.username, tenantProfileFilter.username) || !this.matchUsername(tenantProfile.upn, tenantProfileFilter.username))) {
+          return false;
+        }
+        if (!!tenantProfileFilter.loginHint && !this.matchLoginHintWithTenantProfile(tenantProfile, tenantProfileFilter.loginHint)) {
+          return false;
+        }
+        if (!!tenantProfileFilter.upn && !(tenantProfile.upn === tenantProfileFilter.upn)) {
+          return false;
+        }
         return true;
       }
       idTokenClaimsMatchTenantProfileFilter(idTokenClaims, tenantProfileFilter) {
@@ -6316,7 +6348,7 @@ var require_msal_node = __commonJS({
           if (!!tenantProfileFilter.loginHint && !this.matchLoginHintFromTokenClaims(idTokenClaims, tenantProfileFilter.loginHint)) {
             return false;
           }
-          if (!!tenantProfileFilter.username && !this.matchUsername(idTokenClaims.preferred_username, tenantProfileFilter.username)) {
+          if (!!tenantProfileFilter.username && !this.matchUsername(idTokenClaims.preferred_username, tenantProfileFilter.username) && !this.matchUsername(idTokenClaims.upn, tenantProfileFilter.username)) {
             return false;
           }
           if (!!tenantProfileFilter.name && !this.matchName(idTokenClaims, tenantProfileFilter.name)) {
@@ -6408,9 +6440,6 @@ var require_msal_node = __commonJS({
           if (!!accountFilter.homeAccountId && !this.matchHomeAccountId(entity, accountFilter.homeAccountId)) {
             return;
           }
-          if (!!accountFilter.username && !this.matchUsername(entity.username, accountFilter.username)) {
-            return;
-          }
           if (!!accountFilter.environment && !this.matchEnvironment(entity, accountFilter.environment, correlationId)) {
             return;
           }
@@ -6425,7 +6454,10 @@ var require_msal_node = __commonJS({
           }
           const tenantProfileFilter = {
             localAccountId: accountFilter?.localAccountId,
-            name: accountFilter?.name
+            name: accountFilter?.name,
+            username: accountFilter?.username,
+            loginHint: accountFilter?.loginHint,
+            upn: accountFilter?.upn
           };
           const matchingTenantProfiles = entity.tenantProfiles?.filter((tenantProfile) => {
             return this.tenantProfileMatchesFilter(tenantProfile, tenantProfileFilter);
@@ -6644,10 +6676,10 @@ var require_msal_node = __commonJS({
             const numHomeIdTokens = homeIdTokenMap.size;
             if (numHomeIdTokens < 1) {
               this.commonLogger.info("CacheManager:getIdToken - Multiple ID tokens found for account but none match account entity tenant id, returning first result", correlationId);
-              return idTokenMap.values().next().value;
+              return idTokenMap.values().next().value ?? null;
             } else if (numHomeIdTokens === 1) {
               this.commonLogger.info("CacheManager:getIdToken - Multiple ID tokens found for account, defaulting to home tenant profile", correlationId);
-              return homeIdTokenMap.values().next().value;
+              return homeIdTokenMap.values().next().value ?? null;
             } else {
               tokensToBeRemoved = homeIdTokenMap;
             }
@@ -6660,7 +6692,7 @@ var require_msal_node = __commonJS({
           return null;
         }
         this.commonLogger.info("CacheManager:getIdToken - Returning ID token", correlationId);
-        return idTokenMap.values().next().value;
+        return idTokenMap.values().next().value ?? null;
       }
       /**
        * Gets all idTokens matching the given filter
@@ -6935,6 +6967,15 @@ var require_msal_node = __commonJS({
         return !!(cachedUsername && typeof cachedUsername === "string" && filterUsername?.toLowerCase() === cachedUsername.toLowerCase());
       }
       /**
+       * helper to match loginhints
+       * @param entity
+       * @param loginHint
+       * @returns
+       */
+      matchLoginHintWithTenantProfile(tenantProfile, loginHintFilter) {
+        return tenantProfile.loginHint === loginHintFilter || tenantProfile.username === loginHintFilter || tenantProfile.upn === loginHintFilter;
+      }
+      /**
        * helper to match assertion
        * @param value
        * @param oboAssertion
@@ -7018,6 +7059,9 @@ var require_msal_node = __commonJS({
           return true;
         }
         if (tokenClaims.upn === loginHint) {
+          return true;
+        }
+        if (tokenClaims.emails && tokenClaims.emails.includes(loginHint)) {
           return true;
         }
         return false;
@@ -7284,104 +7328,31 @@ var require_msal_node = __commonJS({
         clientCapabilities: [],
         azureCloudOptions: DEFAULT_AZURE_CLOUD_OPTIONS,
         instanceAware: false,
+        isMcp: false,
         ...authOptions
       };
     }
     function isOidcProtocolMode(config) {
       return config.authOptions.authority.options.protocolMode === ProtocolMode.OIDC;
     }
-    var ServerError = class _ServerError extends AuthError {
-      constructor(errorCode, errorMessage, subError, errorNo, status) {
-        super(errorCode, errorMessage, subError);
-        this.name = "ServerError";
-        this.errorNo = errorNo;
-        this.status = status;
-        Object.setPrototypeOf(this, _ServerError.prototype);
+    var TokenCacheContext = class {
+      constructor(tokenCache, hasChanged) {
+        this.cache = tokenCache;
+        this.hasChanged = hasChanged;
+      }
+      /**
+       * boolean which indicates the changes in cache
+       */
+      get cacheHasChanged() {
+        return this.hasChanged;
+      }
+      /**
+       * function to retrieve the token cache
+       */
+      get tokenCache() {
+        return this.cache;
       }
     };
-    var noTokensFound = "no_tokens_found";
-    var nativeAccountUnavailable = "native_account_unavailable";
-    var refreshTokenExpired = "refresh_token_expired";
-    var uxNotAllowed = "ux_not_allowed";
-    var interactionRequired = "interaction_required";
-    var consentRequired = "consent_required";
-    var loginRequired = "login_required";
-    var badToken = "bad_token";
-    var interruptedUser = "interrupted_user";
-    var InteractionRequiredAuthErrorCodes = /* @__PURE__ */ Object.freeze({
-      __proto__: null,
-      badToken,
-      consentRequired,
-      interactionRequired,
-      interruptedUser,
-      loginRequired,
-      nativeAccountUnavailable,
-      noTokensFound,
-      refreshTokenExpired,
-      uxNotAllowed
-    });
-    var InteractionRequiredServerErrorMessage = [
-      interactionRequired,
-      consentRequired,
-      loginRequired,
-      badToken,
-      uxNotAllowed,
-      interruptedUser
-    ];
-    var InteractionRequiredAuthSubErrorMessage = [
-      "message_only",
-      "additional_action",
-      "basic_action",
-      "user_password_expired",
-      "consent_required",
-      "bad_token",
-      "ux_not_allowed",
-      "interrupted_user"
-    ];
-    var InteractionRequiredAuthError = class _InteractionRequiredAuthError extends AuthError {
-      constructor(errorCode, errorMessage, subError, timestamp, traceId, correlationId, claims, errorNo) {
-        super(errorCode, errorMessage, subError);
-        Object.setPrototypeOf(this, _InteractionRequiredAuthError.prototype);
-        this.timestamp = timestamp || "";
-        this.traceId = traceId || "";
-        this.correlationId = correlationId || "";
-        this.claims = claims || "";
-        this.name = "InteractionRequiredAuthError";
-        this.errorNo = errorNo;
-      }
-    };
-    function isInteractionRequiredError(errorCode, errorString, subError) {
-      const isInteractionRequiredErrorCode = !!errorCode && InteractionRequiredServerErrorMessage.indexOf(errorCode) > -1;
-      const isInteractionRequiredSubError = !!subError && InteractionRequiredAuthSubErrorMessage.indexOf(subError) > -1;
-      const isInteractionRequiredErrorDesc = !!errorString && InteractionRequiredServerErrorMessage.some((irErrorCode) => {
-        return errorString.indexOf(irErrorCode) > -1;
-      });
-      return isInteractionRequiredErrorCode || isInteractionRequiredErrorDesc || isInteractionRequiredSubError;
-    }
-    function createInteractionRequiredAuthError(errorCode, errorMessage) {
-      return new InteractionRequiredAuthError(errorCode, errorMessage);
-    }
-    function parseRequestState(base64Decode, state) {
-      if (!base64Decode) {
-        throw createClientAuthError(noCryptoObject);
-      }
-      if (!state) {
-        throw createClientAuthError(invalidState);
-      }
-      try {
-        const splitState = state.split(RESOURCE_DELIM);
-        const libraryState = splitState[0];
-        const userState = splitState.length > 1 ? splitState.slice(1).join(RESOURCE_DELIM) : "";
-        const libraryStateString = base64Decode(libraryState);
-        const libraryStateObj = JSON.parse(libraryStateString);
-        return {
-          userRequestState: userState || "",
-          libraryState: libraryStateObj
-        };
-      } catch (e) {
-        throw createClientAuthError(invalidState);
-      }
-    }
     function nowSeconds() {
       return Math.round((/* @__PURE__ */ new Date()).getTime() / 1e3);
     }
@@ -7403,170 +7374,6 @@ var require_msal_node = __commonJS({
     function delay(t, value) {
       return new Promise((resolve) => setTimeout(() => resolve(value), t));
     }
-    var NetworkClientSendPostRequestAsync = "networkClientSendPostRequestAsync";
-    var RefreshTokenClientExecutePostToTokenEndpoint = "refreshTokenClientExecutePostToTokenEndpoint";
-    var AuthorizationCodeClientExecutePostToTokenEndpoint = "authorizationCodeClientExecutePostToTokenEndpoint";
-    var RefreshTokenClientExecuteTokenRequest = "refreshTokenClientExecuteTokenRequest";
-    var RefreshTokenClientAcquireToken = "refreshTokenClientAcquireToken";
-    var RefreshTokenClientAcquireTokenWithCachedRefreshToken = "refreshTokenClientAcquireTokenWithCachedRefreshToken";
-    var RefreshTokenClientCreateTokenRequestBody = "refreshTokenClientCreateTokenRequestBody";
-    var SilentFlowClientGenerateResultFromCacheRecord = "silentFlowClientGenerateResultFromCacheRecord";
-    var AuthClientExecuteTokenRequest = "authClientExecuteTokenRequest";
-    var AuthClientCreateTokenRequestBody = "authClientCreateTokenRequestBody";
-    var UpdateTokenEndpointAuthority = "updateTokenEndpointAuthority";
-    var PopTokenGenerateCnf = "popTokenGenerateCnf";
-    var HandleServerTokenResponse = "handleServerTokenResponse";
-    var AuthorityResolveEndpointsAsync = "authorityResolveEndpointsAsync";
-    var AuthorityGetCloudDiscoveryMetadataFromNetwork = "authorityGetCloudDiscoveryMetadataFromNetwork";
-    var AuthorityUpdateCloudDiscoveryMetadata = "authorityUpdateCloudDiscoveryMetadata";
-    var AuthorityGetEndpointMetadataFromNetwork = "authorityGetEndpointMetadataFromNetwork";
-    var AuthorityUpdateEndpointMetadata = "authorityUpdateEndpointMetadata";
-    var AuthorityUpdateMetadataWithRegionalInformation = "authorityUpdateMetadataWithRegionalInformation";
-    var RegionDiscoveryDetectRegion = "regionDiscoveryDetectRegion";
-    var RegionDiscoveryGetRegionFromIMDS = "regionDiscoveryGetRegionFromIMDS";
-    var RegionDiscoveryGetCurrentVersion = "regionDiscoveryGetCurrentVersion";
-    var CacheManagerGetRefreshToken = "cacheManagerGetRefreshToken";
-    var invoke = (callback, eventName, logger, telemetryClient, correlationId) => {
-      return (...args) => {
-        logger.trace(`Executing function '${eventName}'`, correlationId);
-        const inProgressEvent = telemetryClient.startMeasurement(eventName, correlationId);
-        if (correlationId) {
-          telemetryClient.incrementFields({ [`ext.${eventName}CallCount`]: 1 }, correlationId);
-        }
-        try {
-          const result = callback(...args);
-          inProgressEvent.end({
-            success: true
-          });
-          logger.trace(`Returning result from '${eventName}'`, correlationId);
-          return result;
-        } catch (e) {
-          logger.trace(`Error occurred in '${eventName}'`, correlationId);
-          try {
-            logger.trace(JSON.stringify(e), correlationId);
-          } catch (e2) {
-            logger.trace("Unable to print error message.", correlationId);
-          }
-          inProgressEvent.end({
-            success: false
-          }, e);
-          throw e;
-        }
-      };
-    };
-    var invokeAsync = (callback, eventName, logger, telemetryClient, correlationId) => {
-      return (...args) => {
-        logger.trace(`Executing function '${eventName}'`, correlationId);
-        const inProgressEvent = telemetryClient.startMeasurement(eventName, correlationId);
-        if (correlationId) {
-          telemetryClient.incrementFields({ [`ext.${eventName}CallCount`]: 1 }, correlationId);
-        }
-        return callback(...args).then((response) => {
-          logger.trace(`Returning result from '${eventName}'`, correlationId);
-          inProgressEvent.end({
-            success: true
-          });
-          return response;
-        }).catch((e) => {
-          logger.trace(`Error occurred in '${eventName}'`, correlationId);
-          try {
-            logger.trace(JSON.stringify(e), correlationId);
-          } catch (e2) {
-            logger.trace("Unable to print error message.", correlationId);
-          }
-          inProgressEvent.end({
-            success: false
-          }, e);
-          throw e;
-        });
-      };
-    };
-    var KeyLocation = {
-      SW: "sw"
-    };
-    var PopTokenGenerator = class {
-      constructor(cryptoUtils, performanceClient) {
-        this.cryptoUtils = cryptoUtils;
-        this.performanceClient = performanceClient;
-      }
-      /**
-       * Generates the req_cnf validated at the RP in the POP protocol for SHR parameters
-       * and returns an object containing the keyid, the full req_cnf string and the req_cnf string hash
-       * @param request
-       * @returns
-       */
-      async generateCnf(request, logger) {
-        const reqCnf = await invokeAsync(this.generateKid.bind(this), PopTokenGenerateCnf, logger, this.performanceClient, request.correlationId)(request);
-        const reqCnfString = this.cryptoUtils.base64UrlEncode(JSON.stringify(reqCnf));
-        return {
-          kid: reqCnf.kid,
-          reqCnfString
-        };
-      }
-      /**
-       * Generates key_id for a SHR token request
-       * @param request
-       * @returns
-       */
-      async generateKid(request) {
-        const kidThumbprint = await this.cryptoUtils.getPublicKeyThumbprint(request);
-        return {
-          kid: kidThumbprint,
-          xms_ksl: KeyLocation.SW
-        };
-      }
-      /**
-       * Signs the POP access_token with the local generated key-pair
-       * @param accessToken
-       * @param request
-       * @returns
-       */
-      async signPopToken(accessToken, keyId, request) {
-        return this.signPayload(accessToken, keyId, request);
-      }
-      /**
-       * Utility function to generate the signed JWT for an access_token
-       * @param payload
-       * @param kid
-       * @param request
-       * @param claims
-       * @returns
-       */
-      async signPayload(payload, keyId, request, claims) {
-        const { resourceRequestMethod, resourceRequestUri, shrClaims, shrNonce, shrOptions } = request;
-        const resourceUrlString = resourceRequestUri ? new UrlString(resourceRequestUri) : void 0;
-        const resourceUrlComponents = resourceUrlString?.getUrlComponents();
-        return this.cryptoUtils.signJwt({
-          at: payload,
-          ts: nowSeconds(),
-          m: resourceRequestMethod?.toUpperCase(),
-          u: resourceUrlComponents?.HostNameAndPort,
-          nonce: shrNonce || this.cryptoUtils.createNewGuid(),
-          p: resourceUrlComponents?.AbsolutePath,
-          q: resourceUrlComponents?.QueryString ? [[], resourceUrlComponents.QueryString] : void 0,
-          client_claims: shrClaims || void 0,
-          ...claims
-        }, keyId, shrOptions, request.correlationId);
-      }
-    };
-    var TokenCacheContext = class {
-      constructor(tokenCache, hasChanged) {
-        this.cache = tokenCache;
-        this.hasChanged = hasChanged;
-      }
-      /**
-       * boolean which indicates the changes in cache
-       */
-      get cacheHasChanged() {
-        return this.hasChanged;
-      }
-      /**
-       * function to retrieve the token cache
-       */
-      get tokenCache() {
-        return this.cache;
-      }
-    };
     function createIdTokenEntity(homeAccountId, environment, idToken, clientId, tenantId) {
       const idTokenEntity = {
         credentialType: CredentialType.ID_TOKEN,
@@ -7718,6 +7525,244 @@ var require_msal_node = __commonJS({
     function isAuthorityMetadataExpired(metadata) {
       return metadata.expiresAt <= nowSeconds();
     }
+    var NetworkClientSendPostRequestAsync = "networkClientSendPostRequestAsync";
+    var RefreshTokenClientExecutePostToTokenEndpoint = "refreshTokenClientExecutePostToTokenEndpoint";
+    var AuthorizationCodeClientExecutePostToTokenEndpoint = "authorizationCodeClientExecutePostToTokenEndpoint";
+    var RefreshTokenClientExecuteTokenRequest = "refreshTokenClientExecuteTokenRequest";
+    var RefreshTokenClientAcquireToken = "refreshTokenClientAcquireToken";
+    var RefreshTokenClientAcquireTokenWithCachedRefreshToken = "refreshTokenClientAcquireTokenWithCachedRefreshToken";
+    var RefreshTokenClientCreateTokenRequestBody = "refreshTokenClientCreateTokenRequestBody";
+    var SilentFlowClientGenerateResultFromCacheRecord = "silentFlowClientGenerateResultFromCacheRecord";
+    var AuthClientExecuteTokenRequest = "authClientExecuteTokenRequest";
+    var AuthClientCreateTokenRequestBody = "authClientCreateTokenRequestBody";
+    var UpdateTokenEndpointAuthority = "updateTokenEndpointAuthority";
+    var PopTokenGenerateCnf = "popTokenGenerateCnf";
+    var HandleServerTokenResponse = "handleServerTokenResponse";
+    var AuthorityResolveEndpointsAsync = "authorityResolveEndpointsAsync";
+    var AuthorityGetCloudDiscoveryMetadataFromNetwork = "authorityGetCloudDiscoveryMetadataFromNetwork";
+    var AuthorityUpdateCloudDiscoveryMetadata = "authorityUpdateCloudDiscoveryMetadata";
+    var AuthorityGetEndpointMetadataFromNetwork = "authorityGetEndpointMetadataFromNetwork";
+    var AuthorityUpdateEndpointMetadata = "authorityUpdateEndpointMetadata";
+    var AuthorityUpdateMetadataWithRegionalInformation = "authorityUpdateMetadataWithRegionalInformation";
+    var RegionDiscoveryDetectRegion = "regionDiscoveryDetectRegion";
+    var RegionDiscoveryGetRegionFromIMDS = "regionDiscoveryGetRegionFromIMDS";
+    var RegionDiscoveryGetCurrentVersion = "regionDiscoveryGetCurrentVersion";
+    var CacheManagerGetRefreshToken = "cacheManagerGetRefreshToken";
+    var invoke = (callback, eventName, logger, telemetryClient, correlationId) => {
+      return (...args) => {
+        logger.trace(`Executing function '${eventName}'`, correlationId);
+        const inProgressEvent = telemetryClient.startMeasurement(eventName, correlationId);
+        if (correlationId) {
+          telemetryClient.incrementFields({ [`ext.${eventName}CallCount`]: 1 }, correlationId);
+        }
+        try {
+          const result = callback(...args);
+          inProgressEvent.end({
+            success: true
+          });
+          logger.trace(`Returning result from '${eventName}'`, correlationId);
+          return result;
+        } catch (e) {
+          logger.trace(`Error occurred in '${eventName}'`, correlationId);
+          try {
+            logger.trace(JSON.stringify(e), correlationId);
+          } catch (e2) {
+            logger.trace("Unable to print error message.", correlationId);
+          }
+          inProgressEvent.end({
+            success: false
+          }, e);
+          throw e;
+        }
+      };
+    };
+    var invokeAsync = (callback, eventName, logger, telemetryClient, correlationId) => {
+      return (...args) => {
+        logger.trace(`Executing function '${eventName}'`, correlationId);
+        const inProgressEvent = telemetryClient.startMeasurement(eventName, correlationId);
+        if (correlationId) {
+          telemetryClient.incrementFields({ [`ext.${eventName}CallCount`]: 1 }, correlationId);
+        }
+        return callback(...args).then((response) => {
+          logger.trace(`Returning result from '${eventName}'`, correlationId);
+          inProgressEvent.end({
+            success: true
+          });
+          return response;
+        }).catch((e) => {
+          logger.trace(`Error occurred in '${eventName}'`, correlationId);
+          try {
+            logger.trace(JSON.stringify(e), correlationId);
+          } catch (e2) {
+            logger.trace("Unable to print error message.", correlationId);
+          }
+          inProgressEvent.end({
+            success: false
+          }, e);
+          throw e;
+        });
+      };
+    };
+    var KeyLocation = {
+      SW: "sw"
+    };
+    var PopTokenGenerator = class {
+      constructor(cryptoUtils, performanceClient) {
+        this.cryptoUtils = cryptoUtils;
+        this.performanceClient = performanceClient;
+      }
+      /**
+       * Generates the req_cnf validated at the RP in the POP protocol for SHR parameters
+       * and returns an object containing the keyid, the full req_cnf string and the req_cnf string hash
+       * @param request
+       * @returns
+       */
+      async generateCnf(request, logger) {
+        const reqCnf = await invokeAsync(this.generateKid.bind(this), PopTokenGenerateCnf, logger, this.performanceClient, request.correlationId)(request);
+        const reqCnfString = this.cryptoUtils.base64UrlEncode(JSON.stringify(reqCnf));
+        return {
+          kid: reqCnf.kid,
+          reqCnfString
+        };
+      }
+      /**
+       * Generates key_id for a SHR token request
+       * @param request
+       * @returns
+       */
+      async generateKid(request) {
+        const kidThumbprint = await this.cryptoUtils.getPublicKeyThumbprint(request);
+        return {
+          kid: kidThumbprint,
+          xms_ksl: KeyLocation.SW
+        };
+      }
+      /**
+       * Signs the POP access_token with the local generated key-pair
+       * @param accessToken
+       * @param request
+       * @returns
+       */
+      async signPopToken(accessToken, keyId, request) {
+        return this.signPayload(accessToken, keyId, request);
+      }
+      /**
+       * Utility function to generate the signed JWT for an access_token
+       * @param payload
+       * @param kid
+       * @param request
+       * @param claims
+       * @returns
+       */
+      async signPayload(payload, keyId, request, claims) {
+        const { resourceRequestMethod, resourceRequestUri, shrClaims, shrNonce, shrOptions } = request;
+        const resourceUrlString = resourceRequestUri ? new UrlString(resourceRequestUri) : void 0;
+        const resourceUrlComponents = resourceUrlString?.getUrlComponents();
+        return this.cryptoUtils.signJwt({
+          at: payload,
+          ts: nowSeconds(),
+          m: resourceRequestMethod?.toUpperCase(),
+          u: resourceUrlComponents?.HostNameAndPort,
+          nonce: shrNonce || this.cryptoUtils.createNewGuid(),
+          p: resourceUrlComponents?.AbsolutePath,
+          q: resourceUrlComponents?.QueryString ? [[], resourceUrlComponents.QueryString] : void 0,
+          client_claims: shrClaims || void 0,
+          ...claims
+        }, keyId, shrOptions, request.correlationId);
+      }
+    };
+    var noTokensFound = "no_tokens_found";
+    var nativeAccountUnavailable = "native_account_unavailable";
+    var refreshTokenExpired = "refresh_token_expired";
+    var uxNotAllowed = "ux_not_allowed";
+    var interactionRequired = "interaction_required";
+    var consentRequired = "consent_required";
+    var loginRequired = "login_required";
+    var badToken = "bad_token";
+    var interruptedUser = "interrupted_user";
+    var InteractionRequiredAuthErrorCodes = /* @__PURE__ */ Object.freeze({
+      __proto__: null,
+      badToken,
+      consentRequired,
+      interactionRequired,
+      interruptedUser,
+      loginRequired,
+      nativeAccountUnavailable,
+      noTokensFound,
+      refreshTokenExpired,
+      uxNotAllowed
+    });
+    var InteractionRequiredServerErrorMessage = [
+      interactionRequired,
+      consentRequired,
+      loginRequired,
+      badToken,
+      uxNotAllowed,
+      interruptedUser
+    ];
+    var InteractionRequiredAuthSubErrorMessage = [
+      "message_only",
+      "additional_action",
+      "basic_action",
+      "user_password_expired",
+      "consent_required",
+      "bad_token",
+      "ux_not_allowed",
+      "interrupted_user"
+    ];
+    var InteractionRequiredAuthError = class _InteractionRequiredAuthError extends AuthError {
+      constructor(errorCode, errorMessage, subError, timestamp, traceId, correlationId, claims, errorNo) {
+        super(errorCode, errorMessage, subError);
+        Object.setPrototypeOf(this, _InteractionRequiredAuthError.prototype);
+        this.timestamp = timestamp || "";
+        this.traceId = traceId || "";
+        this.correlationId = correlationId || "";
+        this.claims = claims || "";
+        this.name = "InteractionRequiredAuthError";
+        this.errorNo = errorNo;
+      }
+    };
+    function isInteractionRequiredError(errorCode, errorString, subError) {
+      const isInteractionRequiredErrorCode = !!errorCode && InteractionRequiredServerErrorMessage.indexOf(errorCode) > -1;
+      const isInteractionRequiredSubError = !!subError && InteractionRequiredAuthSubErrorMessage.indexOf(subError) > -1;
+      const isInteractionRequiredErrorDesc = !!errorString && InteractionRequiredServerErrorMessage.some((irErrorCode) => {
+        return errorString.indexOf(irErrorCode) > -1;
+      });
+      return isInteractionRequiredErrorCode || isInteractionRequiredErrorDesc || isInteractionRequiredSubError;
+    }
+    function createInteractionRequiredAuthError(errorCode, errorMessage) {
+      return new InteractionRequiredAuthError(errorCode, errorMessage);
+    }
+    var ServerError = class _ServerError extends AuthError {
+      constructor(errorCode, errorMessage, subError, errorNo, status) {
+        super(errorCode, errorMessage, subError);
+        this.name = "ServerError";
+        this.errorNo = errorNo;
+        this.status = status;
+        Object.setPrototypeOf(this, _ServerError.prototype);
+      }
+    };
+    function parseRequestState(base64Decode, state) {
+      if (!base64Decode) {
+        throw createClientAuthError(noCryptoObject);
+      }
+      if (!state) {
+        throw createClientAuthError(invalidState);
+      }
+      try {
+        const splitState = state.split(RESOURCE_DELIM);
+        const libraryState = splitState[0];
+        const userState = splitState.length > 1 ? splitState.slice(1).join(RESOURCE_DELIM) : "";
+        const libraryStateString = base64Decode(libraryState);
+        const libraryStateObj = JSON.parse(libraryStateString);
+        return {
+          userRequestState: userState || "",
+          libraryState: libraryStateObj
+        };
+      } catch (e) {
+        throw createClientAuthError(invalidState);
+      }
+    }
     var ResponseHandler = class _ResponseHandler {
       constructor(clientId, cacheStorage, cryptoObj, logger, performanceClient, serializableCache, persistencePlugin) {
         this.clientId = clientId;
@@ -7841,7 +7886,8 @@ ${serverError}`, correlationId);
             authCodePayload,
             void 0,
             // nativeAccountId
-            this.logger
+            this.logger,
+            this.performanceClient
           );
         }
         let cachedAccessToken = null;
@@ -7854,6 +7900,10 @@ ${serverError}`, correlationId);
           const extendedTokenExpirationSeconds = tokenExpirationSeconds + extExpiresIn;
           const refreshOnSeconds = refreshIn && refreshIn > 0 ? reqTimestamp + refreshIn : void 0;
           cachedAccessToken = createAccessTokenEntity(this.homeAccountIdentifier, env, serverTokenResponse.access_token, this.clientId, claimsTenantId || authority.tenant || "", responseScopes.printScopes(), tokenExpirationSeconds, extendedTokenExpirationSeconds, this.cryptoObj.base64Decode, refreshOnSeconds, serverTokenResponse.token_type, userAssertionHash, serverTokenResponse.key_id);
+          const resource = request.resource || null;
+          if (resource) {
+            cachedAccessToken.resource = resource;
+          }
         }
         let cachedRefreshToken = null;
         if (serverTokenResponse.refresh_token) {
@@ -7956,16 +8006,15 @@ ${serverError}`, correlationId);
         };
       }
     };
-    function buildAccountToCache(cacheStorage, authority, homeAccountId, base64Decode, correlationId, idTokenClaims, clientInfo, environment, claimsTenantId, authCodePayload, nativeAccountId, logger) {
+    function buildAccountToCache(cacheStorage, authority, homeAccountId, base64Decode, correlationId, idTokenClaims, clientInfo, environment, claimsTenantId, authCodePayload, nativeAccountId, logger, performanceClient) {
       logger?.verbose("setCachedAccount called", correlationId);
-      const accountKeys = cacheStorage.getAccountKeys();
-      const baseAccountKey = accountKeys.find((accountKey) => {
-        return accountKey.startsWith(homeAccountId);
-      });
-      let cachedAccount = null;
-      if (baseAccountKey) {
-        cachedAccount = cacheStorage.getAccount(baseAccountKey, correlationId);
+      const accountEnvironment = environment || authority.getPreferredCache();
+      const matchedAccounts = cacheStorage.getAccountsFilteredBy({ homeAccountId, environment: accountEnvironment }, correlationId);
+      performanceClient?.addFields({ cacheMatchedAccounts: matchedAccounts.length }, correlationId);
+      if (matchedAccounts.length > 1) {
+        logger?.warning("Multiple base accounts matched homeAccountId. Ignoring cached account and creating a new base account.", correlationId);
       }
+      const cachedAccount = matchedAccounts.length === 1 ? matchedAccounts[0] : null;
       const baseAccount = cachedAccount || createAccountEntity({
         homeAccountId,
         idTokenClaims,
@@ -9059,6 +9108,7 @@ Error Description: '${typedError.message}'`, this.correlationId);
           addRedirectUri(parameters, request.redirectUri);
         }
         addScopes(parameters, request.scopes, true, this.oidcDefaultScopes);
+        addResource(parameters, request.resource);
         addAuthorizationCode(parameters, request.code);
         addLibraryInfo(parameters, this.config.libraryInfo);
         addApplicationTelemetry(parameters, this.config.telemetry.application);
@@ -9095,9 +9145,6 @@ Error Description: '${typedError.message}'`, this.correlationId);
           } else {
             throw createClientConfigurationError(missingSshJwk);
           }
-        }
-        if (!StringUtils.isEmptyObj(request.claims) || this.config.authOptions.clientCapabilities && this.config.authOptions.clientCapabilities.length > 0) {
-          addClaims(parameters, request.claims, this.config.authOptions.clientCapabilities);
         }
         let ccsCred = void 0;
         if (request.clientInfo) {
@@ -9140,6 +9187,7 @@ Error Description: '${typedError.message}'`, this.correlationId);
           });
         }
         instrumentBrokerParams(parameters, request.correlationId, this.performanceClient);
+        addClaims(parameters, request.claims, this.config.authOptions.clientCapabilities, request.skipBrokerClaims);
         return mapToQueryString(parameters);
       }
       /**
@@ -9328,9 +9376,6 @@ Error Description: '${typedError.message}'`, this.correlationId);
             throw createClientConfigurationError(missingSshJwk);
           }
         }
-        if (!StringUtils.isEmptyObj(request.claims) || this.config.authOptions.clientCapabilities && this.config.authOptions.clientCapabilities.length > 0) {
-          addClaims(parameters, request.claims, this.config.authOptions.clientCapabilities);
-        }
         if (this.config.systemOptions.preventCorsPreflight && request.ccsCredential) {
           switch (request.ccsCredential.type) {
             case CcsCredentialType.HOME_ACCOUNT_ID:
@@ -9355,6 +9400,7 @@ Error Description: '${typedError.message}'`, this.correlationId);
           });
         }
         instrumentBrokerParams(parameters, request.correlationId, this.performanceClient);
+        addClaims(parameters, request.claims, this.config.authOptions.clientCapabilities, request.skipBrokerClaims);
         return mapToQueryString(parameters);
       }
     };
@@ -9391,6 +9437,11 @@ Error Description: '${typedError.message}'`, this.correlationId);
         } else if (wasClockTurnedBack(cachedAccessToken.cachedAt) || isTokenExpired(cachedAccessToken.expiresOn, this.config.systemOptions.tokenRenewalOffsetSeconds)) {
           this.setCacheOutcome(CacheOutcome.CACHED_ACCESS_TOKEN_EXPIRED, request.correlationId);
           throw createClientAuthError(tokenRefreshRequired);
+        } else if (request.resource) {
+          if (cachedAccessToken.resource !== request.resource) {
+            this.setCacheOutcome(CacheOutcome.NO_CACHED_ACCESS_TOKEN, request.correlationId);
+            throw createClientAuthError(tokenRefreshRequired);
+          }
         } else if (cachedAccessToken.refreshOn && isTokenExpired(cachedAccessToken.refreshOn, 0)) {
           lastCacheOutcome = CacheOutcome.PROACTIVELY_REFRESHED;
         }
@@ -9448,10 +9499,12 @@ Error Description: '${typedError.message}'`, this.correlationId);
         ...request.extraScopesToConsent || []
       ];
       addScopes(parameters, requestScopes, true, authOptions.authority.options.OIDCOptions?.defaultScopes);
+      addResource(parameters, request.resource);
       addRedirectUri(parameters, request.redirectUri);
       addCorrelationId(parameters, correlationId);
       addResponseMode(parameters, request.responseMode);
       addClientInfo(parameters);
+      addCliData(parameters);
       if (request.prompt) {
         addPrompt(parameters, request.prompt);
       }
@@ -9515,12 +9568,10 @@ Error Description: '${typedError.message}'`, this.correlationId);
       if (request.state) {
         addState(parameters, request.state);
       }
-      if (request.claims || authOptions.clientCapabilities && authOptions.clientCapabilities.length > 0) {
-        addClaims(parameters, request.claims, authOptions.clientCapabilities);
-      }
       if (request.embeddedClientId) {
         addBrokerParameters(parameters, authOptions.clientId, authOptions.redirectUri);
       }
+      addClaims(parameters, request.claims, authOptions.clientCapabilities, request.skipBrokerClaims);
       if (authOptions.instanceAware && (!request.extraQueryParameters || !Object.keys(request.extraQueryParameters).includes(INSTANCE_AWARE))) {
         addInstanceAware(parameters);
       }
@@ -9535,6 +9586,23 @@ Error Description: '${typedError.message}'`, this.correlationId);
     }
     function extractLoginHint(account) {
       return account.loginHint || account.idTokenClaims?.login_hint || null;
+    }
+    function enforceResourceParameter(isMcp, request) {
+      if (!isMcp) {
+        return;
+      }
+      if (request.resource && (containsResourceParam(request.extraParameters) || containsResourceParam(request.extraQueryParameters))) {
+        throw createClientAuthError(misplacedResourceParam);
+      }
+      if (!request.resource) {
+        throw createClientAuthError(resourceParameterRequired);
+      }
+    }
+    function containsResourceParam(params) {
+      if (!params) {
+        return false;
+      }
+      return Object.prototype.hasOwnProperty.call(params, "resource");
     }
     var unexpectedError = "unexpected_error";
     var postRequestFailed = "post_request_failed";
@@ -9855,6 +9923,7 @@ Error Description: '${typedError.message}'`, this.correlationId);
               keyId: serializedAT.key_id,
               tokenType: serializedAT.token_type,
               userAssertionHash: serializedAT.userAssertionHash,
+              resource: serializedAT.resource,
               lastUpdatedAt: Date.now().toString()
             };
             atObjects[key] = accessToken;
@@ -10341,7 +10410,8 @@ Error Description: '${typedError.message}'`, this.correlationId);
       azureCloudOptions: {
         azureCloudInstance: AzureCloudInstance.None,
         tenant: ""
-      }
+      },
+      isMcp: false
     };
     var DEFAULT_LOGGER_OPTIONS = {
       loggerCallback: () => {
@@ -11364,7 +11434,7 @@ Error Description: '${typedError.message}'`, this.correlationId);
       }
     };
     var name = "@azure/msal-node";
-    var version2 = "5.0.6";
+    var version2 = "5.1.4";
     var BaseClient = class {
       constructor(configuration) {
         this.config = buildClientConfiguration(configuration);
@@ -11747,7 +11817,8 @@ Error Description: '${typedError.message}'`, this.correlationId);
             clientId: this.config.auth.clientId,
             authority: discoveredAuthority,
             clientCapabilities: this.config.auth.clientCapabilities,
-            redirectUri
+            redirectUri,
+            isMcp: this.config.auth.isMcp
           },
           loggerOptions: {
             logLevel: this.config.system.loggerOptions.logLevel,
@@ -12136,6 +12207,7 @@ Error Description: '${typedError.message}'`, this.correlationId);
        */
       async acquireTokenByDeviceCode(request) {
         this.logger.info("acquireTokenByDeviceCode called", request.correlationId || "");
+        enforceResourceParameter(this.config.auth.isMcp, request);
         const validRequest = Object.assign(request, await this.initializeBaseRequest(request));
         const serverTelemetryManager = this.initializeServerTelemetryManager(ApiId.acquireTokenByDeviceCode, validRequest.correlationId);
         try {
@@ -12158,6 +12230,7 @@ Error Description: '${typedError.message}'`, this.correlationId);
       async acquireTokenInteractive(request) {
         const correlationId = request.correlationId || this.cryptoProvider.createNewGuid();
         this.logger.trace("acquireTokenInteractive called", correlationId);
+        enforceResourceParameter(this.config.auth.isMcp, request);
         const { openBrowser, successTemplate, errorTemplate, windowHandle, loopbackClient: customLoopbackClient, ...remainingProperties } = request;
         if (this.nativeBrokerPlugin) {
           const brokerRequest = {
@@ -12233,6 +12306,7 @@ Error Description: '${typedError.message}'`, this.correlationId);
       async acquireTokenSilent(request) {
         const correlationId = request.correlationId || this.cryptoProvider.createNewGuid();
         this.logger.trace("acquireTokenSilent called", correlationId);
+        enforceResourceParameter(this.config.auth.isMcp, request);
         if (this.nativeBrokerPlugin) {
           const brokerRequest = {
             ...request,
@@ -12258,6 +12332,22 @@ Error Description: '${typedError.message}'`, this.correlationId);
           request.redirectUri = "";
         }
         return super.acquireTokenSilent(request);
+      }
+      /**
+       * Acquires a token by exchanging the authorization code received from the first step of OAuth 2.0 Authorization Code Flow.
+       * In MCP mode, a resource parameter is required on the request.
+       */
+      async acquireTokenByCode(request, authCodePayLoad) {
+        enforceResourceParameter(this.config.auth.isMcp, request);
+        return super.acquireTokenByCode(request, authCodePayLoad);
+      }
+      /**
+       * Acquires a token by exchanging the refresh token provided for a new set of tokens.
+       * In MCP mode, a resource parameter is required on the request.
+       */
+      async acquireTokenByRefreshToken(request) {
+        enforceResourceParameter(this.config.auth.isMcp, request);
+        return super.acquireTokenByRefreshToken(request);
       }
       /**
        * Removes cache artifacts associated with the given account
@@ -14007,7 +14097,7 @@ Error Description: '${typedError.message}'`, this.correlationId);
   }
 });
 
-// node_modules/is-docker/index.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/is-docker/index.js
 function hasDockerEnv() {
   try {
     import_node_fs.default.statSync("/.dockerenv");
@@ -14031,12 +14121,12 @@ function isDocker() {
 }
 var import_node_fs, isDockerCached;
 var init_is_docker = __esm({
-  "node_modules/is-docker/index.js"() {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/is-docker/index.js"() {
     import_node_fs = __toESM(require("node:fs"), 1);
   }
 });
 
-// node_modules/is-inside-container/index.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/is-inside-container/index.js
 function isInsideContainer() {
   if (cachedResult === void 0) {
     cachedResult = hasContainerEnv() || isDocker();
@@ -14045,7 +14135,7 @@ function isInsideContainer() {
 }
 var import_node_fs2, cachedResult, hasContainerEnv;
 var init_is_inside_container = __esm({
-  "node_modules/is-inside-container/index.js"() {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/is-inside-container/index.js"() {
     import_node_fs2 = __toESM(require("node:fs"), 1);
     init_is_docker();
     hasContainerEnv = () => {
@@ -14059,10 +14149,10 @@ var init_is_inside_container = __esm({
   }
 });
 
-// node_modules/is-wsl/index.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/is-wsl/index.js
 var import_node_process, import_node_os, import_node_fs3, isWsl, is_wsl_default;
 var init_is_wsl = __esm({
-  "node_modules/is-wsl/index.js"() {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/is-wsl/index.js"() {
     import_node_process = __toESM(require("node:process"), 1);
     import_node_os = __toESM(require("node:os"), 1);
     import_node_fs3 = __toESM(require("node:fs"), 1);
@@ -14092,10 +14182,10 @@ var init_is_wsl = __esm({
   }
 });
 
-// node_modules/powershell-utils/index.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/powershell-utils/index.js
 var import_node_process2, import_node_buffer, import_node_util, import_node_child_process, execFile, powerShellPath, executePowerShell;
 var init_powershell_utils = __esm({
-  "node_modules/powershell-utils/index.js"() {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/powershell-utils/index.js"() {
     import_node_process2 = __toESM(require("node:process"), 1);
     import_node_buffer = require("node:buffer");
     import_node_util = require("node:util");
@@ -14132,7 +14222,7 @@ var init_powershell_utils = __esm({
   }
 });
 
-// node_modules/wsl-utils/utilities.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/wsl-utils/utilities.js
 function parseMountPointFromConfig(content) {
   for (const line of content.split("\n")) {
     if (/^\s*#/.test(line)) {
@@ -14146,14 +14236,14 @@ function parseMountPointFromConfig(content) {
   }
 }
 var init_utilities = __esm({
-  "node_modules/wsl-utils/utilities.js"() {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/wsl-utils/utilities.js"() {
   }
 });
 
-// node_modules/wsl-utils/index.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/wsl-utils/index.js
 var import_node_util2, import_node_child_process2, import_promises, execFile2, wslDrivesMountPoint, powerShellPathFromWsl, powerShellPath2, canAccessPowerShellPromise, canAccessPowerShell, wslDefaultBrowser, convertWslPathToWindows;
 var init_wsl_utils = __esm({
-  "node_modules/wsl-utils/index.js"() {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/wsl-utils/index.js"() {
     import_node_util2 = require("node:util");
     import_node_child_process2 = __toESM(require("node:child_process"), 1);
     import_promises = __toESM(require("node:fs/promises"), 1);
@@ -14226,7 +14316,7 @@ var init_wsl_utils = __esm({
   }
 });
 
-// node_modules/define-lazy-prop/index.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/define-lazy-prop/index.js
 function defineLazyProperty(object, propertyName, valueGetter) {
   const define = (value) => Object.defineProperty(object, propertyName, { value, enumerable: true, writable: true });
   Object.defineProperty(object, propertyName, {
@@ -14244,11 +14334,11 @@ function defineLazyProperty(object, propertyName, valueGetter) {
   return object;
 }
 var init_define_lazy_prop = __esm({
-  "node_modules/define-lazy-prop/index.js"() {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/define-lazy-prop/index.js"() {
   }
 });
 
-// node_modules/default-browser-id/index.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/default-browser-id/index.js
 async function defaultBrowserId() {
   if (import_node_process3.default.platform !== "darwin") {
     throw new Error("macOS only");
@@ -14263,7 +14353,7 @@ async function defaultBrowserId() {
 }
 var import_node_util3, import_node_process3, import_node_child_process3, execFileAsync;
 var init_default_browser_id = __esm({
-  "node_modules/default-browser-id/index.js"() {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/default-browser-id/index.js"() {
     import_node_util3 = require("node:util");
     import_node_process3 = __toESM(require("node:process"), 1);
     import_node_child_process3 = require("node:child_process");
@@ -14271,7 +14361,7 @@ var init_default_browser_id = __esm({
   }
 });
 
-// node_modules/run-applescript/index.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/run-applescript/index.js
 async function runAppleScript(script, { humanReadableOutput = true, signal } = {}) {
   if (import_node_process4.default.platform !== "darwin") {
     throw new Error("macOS only");
@@ -14286,7 +14376,7 @@ async function runAppleScript(script, { humanReadableOutput = true, signal } = {
 }
 var import_node_process4, import_node_util4, import_node_child_process4, execFileAsync2;
 var init_run_applescript = __esm({
-  "node_modules/run-applescript/index.js"() {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/run-applescript/index.js"() {
     import_node_process4 = __toESM(require("node:process"), 1);
     import_node_util4 = require("node:util");
     import_node_child_process4 = require("node:child_process");
@@ -14294,7 +14384,7 @@ var init_run_applescript = __esm({
   }
 });
 
-// node_modules/bundle-name/index.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/bundle-name/index.js
 async function bundleName(bundleId) {
   if (typeof bundleId !== "string") {
     throw new TypeError("Expected a string bundle identifier");
@@ -14307,13 +14397,13 @@ tell application "System Events" to get value of property list item "CFBundleNam
 }
 var bundleIdentifierPattern;
 var init_bundle_name = __esm({
-  "node_modules/bundle-name/index.js"() {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/bundle-name/index.js"() {
     init_run_applescript();
     bundleIdentifierPattern = /^[^\n\r"\\]+$/u;
   }
 });
 
-// node_modules/default-browser/windows.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/default-browser/windows.js
 async function defaultBrowser(_execFileAsync = execFileAsync3) {
   const regPath = `${import_node_process5.default.env.SYSTEMROOT ?? import_node_process5.default.env.windir ?? "C:\\Windows"}\\System32\\reg.exe`;
   const { stdout } = await _execFileAsync(regPath, [
@@ -14335,7 +14425,7 @@ async function defaultBrowser(_execFileAsync = execFileAsync3) {
 }
 var import_node_process5, import_node_util5, import_node_child_process5, execFileAsync3, windowsBrowserProgIds, _windowsBrowserProgIdMap, UnknownBrowserError;
 var init_windows = __esm({
-  "node_modules/default-browser/windows.js"() {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/default-browser/windows.js"() {
     import_node_process5 = __toESM(require("node:process"), 1);
     import_node_util5 = require("node:util");
     import_node_child_process5 = require("node:child_process");
@@ -14365,7 +14455,7 @@ var init_windows = __esm({
   }
 });
 
-// node_modules/default-browser/index.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/default-browser/index.js
 async function defaultBrowser2() {
   if (import_node_process6.default.platform === "darwin") {
     const id = await defaultBrowserId();
@@ -14385,7 +14475,7 @@ async function defaultBrowser2() {
 }
 var import_node_util6, import_node_process6, import_node_child_process6, execFileAsync4, titleize;
 var init_default_browser = __esm({
-  "node_modules/default-browser/index.js"() {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/default-browser/index.js"() {
     import_node_util6 = require("node:util");
     import_node_process6 = __toESM(require("node:process"), 1);
     import_node_child_process6 = require("node:child_process");
@@ -14398,17 +14488,17 @@ var init_default_browser = __esm({
   }
 });
 
-// node_modules/is-in-ssh/index.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/is-in-ssh/index.js
 var import_node_process7, isInSsh, is_in_ssh_default;
 var init_is_in_ssh = __esm({
-  "node_modules/is-in-ssh/index.js"() {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/is-in-ssh/index.js"() {
     import_node_process7 = __toESM(require("node:process"), 1);
     isInSsh = Boolean(import_node_process7.default.env.SSH_CONNECTION || import_node_process7.default.env.SSH_CLIENT || import_node_process7.default.env.SSH_TTY);
     is_in_ssh_default = isInSsh;
   }
 });
 
-// node_modules/open/index.js
+// ../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/open/index.js
 var open_exports = {};
 __export(open_exports, {
   apps: () => apps,
@@ -14436,7 +14526,7 @@ function detectPlatformBinary({ [platform]: platformBinary }, { wsl } = {}) {
 }
 var import_node_process8, import_node_path, import_node_url, import_node_child_process7, import_promises2, import_meta, fallbackAttemptSymbol, __dirname, localXdgOpenPath, platform, arch, tryEachApp, baseOpen, open, openApp, apps, open_default;
 var init_open = __esm({
-  "node_modules/open/index.js"() {
+  "../../../../../../../../../git/skills-for-copilot-studio/scripts/node_modules/open/index.js"() {
     import_node_process8 = __toESM(require("node:process"), 1);
     import_node_path = __toESM(require("node:path"), 1);
     import_node_url = require("node:url");
@@ -15265,6 +15355,6 @@ safe-buffer/index.js:
   (*! safe-buffer. MIT License. Feross Aboukhadijeh <https://feross.org/opensource> *)
 
 @azure/msal-node/lib/msal-node.cjs:
-  (*! @azure/msal-node v5.0.6 2026-03-02 *)
-  (*! @azure/msal-common v16.2.0 2026-03-02 *)
+  (*! @azure/msal-node v5.1.4 2026-04-21 *)
+  (*! @azure/msal-common v16.5.1 2026-04-21 *)
 */
