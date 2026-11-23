@@ -15,7 +15,7 @@ Add an `AdaptiveCardPrompt` node to an existing Copilot Studio topic. Use this f
 
 1. **Auto-discover the agent directory**:
    ```
-   Glob: agents/**/agent.mcs.yml
+   Glob: **/agent.mcs.yml
    ```
    NEVER hardcode an agent name.
 

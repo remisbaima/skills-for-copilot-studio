@@ -38,7 +38,7 @@ Create a global variable that persists across all topics within a conversation.
 # Name: <Human-readable Name>
 # <Description>
 name: <VariableName>
-aIVisibility: <UseInAIContext or HideFromAIContext>
+aIVisibility: <UseInAIContext or Hidden>
 scope: Conversation
 description: <Description of what the variable stores>
 schemaName: <prefix>.globalvariable.<VariableName>
@@ -50,7 +50,7 @@ defaultValue: <DEFAULT or specific value>
    - `name` — PascalCase identifier. This is how topics reference the variable: `Global.<name>` (e.g., `Global.LastDiscussedCity`).
    - `aIVisibility` — Controls orchestrator awareness:
      - `UseInAIContext` — The orchestrator can read and reason about this variable. Use when the variable influences routing or response generation (e.g., user preferences, conversation state the AI should track).
-     - `HideFromAIContext` — The variable exists but the orchestrator doesn't see it. Use for internal bookkeeping (e.g., counters, flags) that topics use but the AI doesn't need to reason about.
+     - `Hidden` — The variable exists but the orchestrator doesn't see it. Use for internal bookkeeping (e.g., counters, flags) that topics use but the AI doesn't need to reason about.
    - `scope: Conversation` — Always `Conversation` for global variables (persists for the session).
    - `schemaName` — Must follow the pattern `<agent-schemaName>.globalvariable.<VariableName>`. Read the prefix from `settings.mcs.yml`.
    - `defaultValue` — Initial value. Use `DEFAULT` if no specific initial value is needed.
