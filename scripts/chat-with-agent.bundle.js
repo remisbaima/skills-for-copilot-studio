@@ -2937,49 +2937,133 @@ var require_dist = __commonJS({
         super(message), this.name = "ParseError", this.type = options.type, this.field = options.field, this.value = options.value, this.line = options.line;
       }
     };
+    var LF = 10;
+    var CR = 13;
+    var SPACE = 32;
     function noop(_arg) {
     }
-    function createParser(callbacks) {
-      if (typeof callbacks == "function")
+    function createParser(config) {
+      if (typeof config == "function")
         throw new TypeError(
-          "`callbacks` must be an object, got a function instead. Did you mean `{onEvent: fn}`?"
+          "`config` must be an object, got a function instead. Did you mean `createParser({onEvent: fn})`?"
         );
-      const { onEvent = noop, onError = noop, onRetry = noop, onComment } = callbacks;
-      let incompleteLine = "", isFirstChunk = true, id, data = "", eventType = "";
-      function feed(newChunk) {
-        const chunk = isFirstChunk ? newChunk.replace(/^\xEF\xBB\xBF/, "") : newChunk, [complete, incomplete] = splitLines(`${incompleteLine}${chunk}`);
-        for (const line of complete)
-          parseLine(line);
-        incompleteLine = incomplete, isFirstChunk = false;
+      const { onEvent = noop, onError = noop, onRetry = noop, onComment, maxBufferSize } = config, pendingFragments = [];
+      let pendingFragmentsLength = 0, isFirstChunk = true, id, data = "", dataLines = 0, eventType, terminated = false;
+      function feed(chunk) {
+        if (terminated)
+          throw new Error(
+            "Cannot feed parser: it was terminated after exceeding the configured max buffer size. Call `reset()` to resume parsing."
+          );
+        if (isFirstChunk && (isFirstChunk = false, chunk.charCodeAt(0) === 239 && chunk.charCodeAt(1) === 187 && chunk.charCodeAt(2) === 191 && (chunk = chunk.slice(3))), pendingFragments.length === 0) {
+          const trailing2 = processLines(chunk);
+          trailing2 !== "" && (pendingFragments.push(trailing2), pendingFragmentsLength = trailing2.length), checkBufferSize();
+          return;
+        }
+        if (chunk.indexOf(`
+`) === -1 && chunk.indexOf("\r") === -1) {
+          pendingFragments.push(chunk), pendingFragmentsLength += chunk.length, checkBufferSize();
+          return;
+        }
+        pendingFragments.push(chunk);
+        const input = pendingFragments.join("");
+        pendingFragments.length = 0, pendingFragmentsLength = 0;
+        const trailing = processLines(input);
+        trailing !== "" && (pendingFragments.push(trailing), pendingFragmentsLength = trailing.length), checkBufferSize();
       }
-      function parseLine(line) {
-        if (line === "") {
+      function checkBufferSize() {
+        maxBufferSize !== void 0 && (pendingFragmentsLength + data.length <= maxBufferSize || (terminated = true, pendingFragments.length = 0, pendingFragmentsLength = 0, id = void 0, data = "", dataLines = 0, eventType = void 0, onError(
+          new ParseError(`Buffered data exceeded max buffer size of ${maxBufferSize} characters`, {
+            type: "max-buffer-size-exceeded"
+          })
+        )));
+      }
+      function processLines(chunk) {
+        let searchIndex = 0;
+        if (chunk.indexOf("\r") === -1) {
+          let lfIndex = chunk.indexOf(`
+`, searchIndex);
+          for (; lfIndex !== -1; ) {
+            if (searchIndex === lfIndex) {
+              dataLines > 0 && onEvent({ id, event: eventType, data }), id = void 0, data = "", dataLines = 0, eventType = void 0, searchIndex = lfIndex + 1, lfIndex = chunk.indexOf(`
+`, searchIndex);
+              continue;
+            }
+            const firstCharCode = chunk.charCodeAt(searchIndex);
+            if (isDataPrefix(chunk, searchIndex, firstCharCode)) {
+              const valueStart = chunk.charCodeAt(searchIndex + 5) === SPACE ? searchIndex + 6 : searchIndex + 5, value = chunk.slice(valueStart, lfIndex);
+              if (dataLines === 0 && chunk.charCodeAt(lfIndex + 1) === LF) {
+                onEvent({ id, event: eventType, data: value }), id = void 0, data = "", eventType = void 0, searchIndex = lfIndex + 2, lfIndex = chunk.indexOf(`
+`, searchIndex);
+                continue;
+              }
+              data = dataLines === 0 ? value : `${data}
+${value}`, dataLines++;
+            } else isEventPrefix(chunk, searchIndex, firstCharCode) ? eventType = chunk.slice(
+              chunk.charCodeAt(searchIndex + 6) === SPACE ? searchIndex + 7 : searchIndex + 6,
+              lfIndex
+            ) || void 0 : parseLine(chunk, searchIndex, lfIndex);
+            searchIndex = lfIndex + 1, lfIndex = chunk.indexOf(`
+`, searchIndex);
+          }
+          return chunk.slice(searchIndex);
+        }
+        for (; searchIndex < chunk.length; ) {
+          const crIndex = chunk.indexOf("\r", searchIndex), lfIndex = chunk.indexOf(`
+`, searchIndex);
+          let lineEnd = -1;
+          if (crIndex !== -1 && lfIndex !== -1 ? lineEnd = crIndex < lfIndex ? crIndex : lfIndex : crIndex !== -1 ? crIndex === chunk.length - 1 ? lineEnd = -1 : lineEnd = crIndex : lfIndex !== -1 && (lineEnd = lfIndex), lineEnd === -1)
+            break;
+          parseLine(chunk, searchIndex, lineEnd), searchIndex = lineEnd + 1, chunk.charCodeAt(searchIndex - 1) === CR && chunk.charCodeAt(searchIndex) === LF && searchIndex++;
+        }
+        return chunk.slice(searchIndex);
+      }
+      function parseLine(chunk, start, end) {
+        if (start === end) {
           dispatchEvent();
           return;
         }
-        if (line.startsWith(":")) {
-          onComment && onComment(line.slice(line.startsWith(": ") ? 2 : 1));
+        const firstCharCode = chunk.charCodeAt(start);
+        if (isDataPrefix(chunk, start, firstCharCode)) {
+          const valueStart = chunk.charCodeAt(start + 5) === SPACE ? start + 6 : start + 5, value2 = chunk.slice(valueStart, end);
+          data = dataLines === 0 ? value2 : `${data}
+${value2}`, dataLines++;
           return;
         }
-        const fieldSeparatorIndex = line.indexOf(":");
-        if (fieldSeparatorIndex !== -1) {
-          const field = line.slice(0, fieldSeparatorIndex), offset = line[fieldSeparatorIndex + 1] === " " ? 2 : 1, value = line.slice(fieldSeparatorIndex + offset);
-          processField(field, value, line);
+        if (isEventPrefix(chunk, start, firstCharCode)) {
+          eventType = chunk.slice(chunk.charCodeAt(start + 6) === SPACE ? start + 7 : start + 6, end) || void 0;
           return;
         }
-        processField(line, "", line);
+        if (firstCharCode === 105 && chunk.charCodeAt(start + 1) === 100 && chunk.charCodeAt(start + 2) === 58) {
+          const value2 = chunk.slice(chunk.charCodeAt(start + 3) === SPACE ? start + 4 : start + 3, end);
+          value2.includes("\0") || (id = value2);
+          return;
+        }
+        if (firstCharCode === 58) {
+          if (onComment) {
+            const line2 = chunk.slice(start, end);
+            onComment(line2.slice(chunk.charCodeAt(start + 1) === SPACE ? 2 : 1));
+          }
+          return;
+        }
+        const line = chunk.slice(start, end), fieldSeparatorIndex = line.indexOf(":");
+        if (fieldSeparatorIndex === -1) {
+          processField(line, "", line);
+          return;
+        }
+        const field = line.slice(0, fieldSeparatorIndex), offset = line.charCodeAt(fieldSeparatorIndex + 1) === SPACE ? 2 : 1, value = line.slice(fieldSeparatorIndex + offset);
+        processField(field, value, line);
       }
       function processField(field, value, line) {
         switch (field) {
           case "event":
-            eventType = value;
+            eventType = value || void 0;
             break;
           case "data":
-            data = `${data}${value}
-`;
+            data = dataLines === 0 ? value : `${data}
+${value}`, dataLines++;
             break;
           case "id":
-            id = value.includes("\0") ? void 0 : value;
+            value.includes("\0") || (id = value);
             break;
           case "retry":
             /^\d+$/.test(value) ? onRetry(parseInt(value, 10)) : onError(
@@ -3001,46 +3085,35 @@ var require_dist = __commonJS({
         }
       }
       function dispatchEvent() {
-        data.length > 0 && onEvent({
+        dataLines > 0 && onEvent({
           id,
-          event: eventType || void 0,
-          // If the data buffer's last character is a U+000A LINE FEED (LF) character,
-          // then remove the last character from the data buffer.
-          data: data.endsWith(`
-`) ? data.slice(0, -1) : data
-        }), id = void 0, data = "", eventType = "";
+          event: eventType,
+          data
+        }), id = void 0, data = "", dataLines = 0, eventType = void 0;
       }
       function reset(options = {}) {
-        incompleteLine && options.consume && parseLine(incompleteLine), isFirstChunk = true, id = void 0, data = "", eventType = "", incompleteLine = "";
+        if (options.consume && pendingFragments.length > 0) {
+          const incompleteLine = pendingFragments.join("");
+          parseLine(incompleteLine, 0, incompleteLine.length);
+        }
+        isFirstChunk = true, id = void 0, data = "", dataLines = 0, eventType = void 0, pendingFragments.length = 0, pendingFragmentsLength = 0, terminated = false;
       }
       return { feed, reset };
     }
-    function splitLines(chunk) {
-      const lines = [];
-      let incompleteLine = "", searchIndex = 0;
-      for (; searchIndex < chunk.length; ) {
-        const crIndex = chunk.indexOf("\r", searchIndex), lfIndex = chunk.indexOf(`
-`, searchIndex);
-        let lineEnd = -1;
-        if (crIndex !== -1 && lfIndex !== -1 ? lineEnd = Math.min(crIndex, lfIndex) : crIndex !== -1 ? crIndex === chunk.length - 1 ? lineEnd = -1 : lineEnd = crIndex : lfIndex !== -1 && (lineEnd = lfIndex), lineEnd === -1) {
-          incompleteLine = chunk.slice(searchIndex);
-          break;
-        } else {
-          const line = chunk.slice(searchIndex, lineEnd);
-          lines.push(line), searchIndex = lineEnd + 1, chunk[searchIndex - 1] === "\r" && chunk[searchIndex] === `
-` && searchIndex++;
-        }
-      }
-      return [lines, incompleteLine];
+    function isDataPrefix(chunk, i, firstCharCode) {
+      return firstCharCode === 100 && chunk.charCodeAt(i + 1) === 97 && chunk.charCodeAt(i + 2) === 116 && chunk.charCodeAt(i + 3) === 97 && chunk.charCodeAt(i + 4) === 58;
+    }
+    function isEventPrefix(chunk, i, firstCharCode) {
+      return firstCharCode === 101 && chunk.charCodeAt(i + 1) === 118 && chunk.charCodeAt(i + 2) === 101 && chunk.charCodeAt(i + 3) === 110 && chunk.charCodeAt(i + 4) === 116 && chunk.charCodeAt(i + 5) === 58;
     }
     exports2.ParseError = ParseError;
     exports2.createParser = createParser;
   }
 });
 
-// node_modules/eventsource-client/dist/node.js
+// node_modules/@microsoft/agents-copilotstudio-client/node_modules/eventsource-client/dist/node.js
 var require_node = __commonJS({
-  "node_modules/eventsource-client/dist/node.js"(exports2) {
+  "node_modules/@microsoft/agents-copilotstudio-client/node_modules/eventsource-client/dist/node.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     var node_stream = require("node:stream");
@@ -8858,6 +8931,9 @@ var require_v35 = __commonJS({
       bytes[8] = bytes[8] & 63 | 128;
       if (buf) {
         offset = offset || 0;
+        if (offset < 0 || offset + 16 > buf.length) {
+          throw new RangeError(`UUID byte range ${offset}:${offset + 15} is out of buffer bounds`);
+        }
         for (let i = 0; i < 16; ++i) {
           buf[offset + i] = bytes[i];
         }
@@ -8994,6 +9070,9 @@ var require_v6 = __commonJS({
       let bytes = (0, v1_js_1.default)({ ...options, _v6: true }, new Uint8Array(16));
       bytes = (0, v1ToV6_js_1.default)(bytes);
       if (buf) {
+        if (offset < 0 || offset + 16 > buf.length) {
+          throw new RangeError(`UUID byte range ${offset}:${offset + 15} is out of buffer bounds`);
+        }
         for (let i = 0; i < 16; i++) {
           buf[offset + i] = bytes[i];
         }
@@ -10796,6 +10875,9 @@ var require_v352 = __commonJS({
       bytes[8] = bytes[8] & 63 | 128;
       if (buf) {
         offset = offset || 0;
+        if (offset < 0 || offset + 16 > buf.length) {
+          throw new RangeError(`UUID byte range ${offset}:${offset + 15} is out of buffer bounds`);
+        }
         for (let i = 0; i < 16; ++i) {
           buf[offset + i] = bytes[i];
         }
@@ -10932,6 +11014,9 @@ var require_v62 = __commonJS({
       let bytes = (0, v1_js_1.default)({ ...options, _v6: true }, new Uint8Array(16));
       bytes = (0, v1ToV6_js_1.default)(bytes);
       if (buf) {
+        if (offset < 0 || offset + 16 > buf.length) {
+          throw new RangeError(`UUID byte range ${offset}:${offset + 15} is out of buffer bounds`);
+        }
         for (let i = 0; i < 16; i++) {
           buf[offset + i] = bytes[i];
         }
@@ -14186,7 +14271,7 @@ var require_innerFrom = __commonJS({
     exports2.fromIterable = fromIterable;
     function fromAsyncIterable(asyncIterable) {
       return new Observable_1.Observable(function(subscriber) {
-        process9(asyncIterable, subscriber).catch(function(err) {
+        process10(asyncIterable, subscriber).catch(function(err) {
           return subscriber.error(err);
         });
       });
@@ -14196,7 +14281,7 @@ var require_innerFrom = __commonJS({
       return fromAsyncIterable(isReadableStreamLike_1.readableStreamLikeToAsyncGenerator(readableStream));
     }
     exports2.fromReadableStreamLike = fromReadableStreamLike;
-    function process9(asyncIterable, subscriber) {
+    function process10(asyncIterable, subscriber) {
       var asyncIterable_1, asyncIterable_1_1;
       var e_2, _a;
       return __awaiter(this, void 0, void 0, function() {
@@ -34903,18 +34988,27 @@ var init_run_applescript = __esm({
 
 // node_modules/bundle-name/index.js
 async function bundleName(bundleId) {
+  if (typeof bundleId !== "string") {
+    throw new TypeError("Expected a string bundle identifier");
+  }
+  if (!bundleIdentifierPattern.test(bundleId)) {
+    throw new TypeError(`Invalid bundle identifier: ${JSON.stringify(bundleId)}`);
+  }
   return runAppleScript(`tell application "Finder" to set app_path to application file id "${bundleId}" as string
 tell application "System Events" to get value of property list item "CFBundleName" of property list file (app_path & ":Contents:Info.plist")`);
 }
+var bundleIdentifierPattern;
 var init_bundle_name = __esm({
   "node_modules/bundle-name/index.js"() {
     init_run_applescript();
+    bundleIdentifierPattern = /^[^\n\r"\\]+$/u;
   }
 });
 
 // node_modules/default-browser/windows.js
 async function defaultBrowser(_execFileAsync = execFileAsync3) {
-  const { stdout } = await _execFileAsync("reg", [
+  const regPath = `${import_node_process5.default.env.SYSTEMROOT ?? import_node_process5.default.env.windir ?? "C:\\Windows"}\\System32\\reg.exe`;
+  const { stdout } = await _execFileAsync(regPath, [
     "QUERY",
     " HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\Shell\\Associations\\UrlAssociations\\http\\UserChoice",
     "/v",
@@ -34931,9 +35025,10 @@ async function defaultBrowser(_execFileAsync = execFileAsync3) {
   const baseIdByHyphen = hyphenIndex === -1 ? void 0 : id.slice(0, hyphenIndex);
   return windowsBrowserProgIds[id] ?? windowsBrowserProgIds[baseIdByDot] ?? windowsBrowserProgIds[baseIdByHyphen] ?? { name: id, id };
 }
-var import_node_util5, import_node_child_process5, execFileAsync3, windowsBrowserProgIds, _windowsBrowserProgIdMap, UnknownBrowserError;
+var import_node_process5, import_node_util5, import_node_child_process5, execFileAsync3, windowsBrowserProgIds, _windowsBrowserProgIdMap, UnknownBrowserError;
 var init_windows = __esm({
   "node_modules/default-browser/windows.js"() {
+    import_node_process5 = __toESM(require("node:process"), 1);
     import_node_util5 = require("node:util");
     import_node_child_process5 = require("node:child_process");
     execFileAsync3 = (0, import_node_util5.promisify)(import_node_child_process5.execFile);
@@ -34964,27 +35059,27 @@ var init_windows = __esm({
 
 // node_modules/default-browser/index.js
 async function defaultBrowser2() {
-  if (import_node_process5.default.platform === "darwin") {
+  if (import_node_process6.default.platform === "darwin") {
     const id = await defaultBrowserId();
     const name = await bundleName(id);
     return { name, id };
   }
-  if (import_node_process5.default.platform === "linux") {
+  if (import_node_process6.default.platform === "linux") {
     const { stdout } = await execFileAsync4("xdg-mime", ["query", "default", "x-scheme-handler/http"]);
     const id = stdout.trim();
     const name = titleize(id.replace(/.desktop$/, "").replace("-", " "));
     return { name, id };
   }
-  if (import_node_process5.default.platform === "win32") {
+  if (import_node_process6.default.platform === "win32") {
     return defaultBrowser();
   }
   throw new Error("Only macOS, Linux, and Windows are supported");
 }
-var import_node_util6, import_node_process5, import_node_child_process6, execFileAsync4, titleize;
+var import_node_util6, import_node_process6, import_node_child_process6, execFileAsync4, titleize;
 var init_default_browser = __esm({
   "node_modules/default-browser/index.js"() {
     import_node_util6 = require("node:util");
-    import_node_process5 = __toESM(require("node:process"), 1);
+    import_node_process6 = __toESM(require("node:process"), 1);
     import_node_child_process6 = require("node:child_process");
     init_default_browser_id();
     init_bundle_name();
@@ -34996,11 +35091,11 @@ var init_default_browser = __esm({
 });
 
 // node_modules/is-in-ssh/index.js
-var import_node_process6, isInSsh, is_in_ssh_default;
+var import_node_process7, isInSsh, is_in_ssh_default;
 var init_is_in_ssh = __esm({
   "node_modules/is-in-ssh/index.js"() {
-    import_node_process6 = __toESM(require("node:process"), 1);
-    isInSsh = Boolean(import_node_process6.default.env.SSH_CONNECTION || import_node_process6.default.env.SSH_CLIENT || import_node_process6.default.env.SSH_TTY);
+    import_node_process7 = __toESM(require("node:process"), 1);
+    isInSsh = Boolean(import_node_process7.default.env.SSH_CONNECTION || import_node_process7.default.env.SSH_CLIENT || import_node_process7.default.env.SSH_TTY);
     is_in_ssh_default = isInSsh;
   }
 });
@@ -35031,10 +35126,10 @@ function detectPlatformBinary({ [platform]: platformBinary }, { wsl } = {}) {
   }
   return detectArchBinary(platformBinary);
 }
-var import_node_process7, import_node_path, import_node_url, import_node_child_process7, import_promises2, import_meta, fallbackAttemptSymbol, __dirname, localXdgOpenPath, platform, arch, tryEachApp, baseOpen, open, openApp, apps, open_default;
+var import_node_process8, import_node_path, import_node_url, import_node_child_process7, import_promises2, import_meta, fallbackAttemptSymbol, __dirname, localXdgOpenPath, platform, arch, tryEachApp, baseOpen, open, openApp, apps, open_default;
 var init_open = __esm({
   "node_modules/open/index.js"() {
-    import_node_process7 = __toESM(require("node:process"), 1);
+    import_node_process8 = __toESM(require("node:process"), 1);
     import_node_path = __toESM(require("node:path"), 1);
     import_node_url = require("node:url");
     import_node_child_process7 = __toESM(require("node:child_process"), 1);
@@ -35049,7 +35144,7 @@ var init_open = __esm({
     fallbackAttemptSymbol = Symbol("fallbackAttempt");
     __dirname = import_meta.url ? import_node_path.default.dirname((0, import_node_url.fileURLToPath)(import_meta.url)) : "";
     localXdgOpenPath = import_node_path.default.join(__dirname, "xdg-open");
-    ({ platform, arch } = import_node_process7.default);
+    ({ platform, arch } = import_node_process8.default);
     tryEachApp = async (apps2, opener) => {
       if (apps2.length === 0) {
         return;
@@ -35200,7 +35295,7 @@ var init_open = __esm({
             exeLocalXdgOpen = true;
           } catch {
           }
-          const useSystemXdgOpen = import_node_process7.default.versions.electron ?? (platform === "android" || isBundled || !exeLocalXdgOpen);
+          const useSystemXdgOpen = import_node_process8.default.versions.electron ?? (platform === "android" || isBundled || !exeLocalXdgOpen);
           command = useSystemXdgOpen ? "xdg-open" : localXdgOpenPath;
         }
         if (appArguments.length > 0) {
@@ -35368,7 +35463,7 @@ var require_shared_auth = __commonJS({
           cache: { cachePlugin: plugin }
         });
       }
-      const key = `${tenantId}:${clientId}`;
+      const key = `${String(tenantId || "").toLowerCase()}:${clientId}`;
       if (_msalApps.has(key)) return _msalApps.get(key);
       const cachePlugin = await getDefaultCachePlugin();
       const app = new msal.PublicClientApplication({
@@ -35435,7 +35530,8 @@ var require_shared_auth = __commonJS({
     async function acquireTokenSilent2(tenantId, clientId, scopes, cacheSlot) {
       const app = await createMsalApp(tenantId, clientId, cacheSlot);
       const allAccounts = await app.getTokenCache().getAllAccounts();
-      const accounts = allAccounts.filter((a) => a.tenantId === tenantId);
+      const normalizedTenant = String(tenantId || "").toLowerCase();
+      const accounts = normalizedTenant ? allAccounts.filter((a) => String(a.tenantId || "").toLowerCase() === normalizedTenant) : [];
       if (accounts.length > 0) {
         try {
           const result = await app.acquireTokenSilent({
