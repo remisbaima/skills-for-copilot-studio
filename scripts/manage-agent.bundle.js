@@ -15577,6 +15577,12 @@ function loadConnJson(agentDir) {
     return null;
   }
 }
+function resolveClusterCategory(conn) {
+  const raw = conn?.AccountInfo?.ClusterCategory ?? conn?.AccountInfo?.clusterCategory ?? conn?.ClusterCategory ?? conn?.clusterCategory;
+  if (typeof raw === "number" && Number.isInteger(raw)) return raw;
+  if (typeof raw === "string" && /^\d+$/.test(raw.trim())) return Number(raw.trim());
+  return void 0;
+}
 function buildSyncRequest(args, tokens) {
   const agentDir = findAgentDir(args.workspace);
   const workspaceUri = toFileUri(agentDir);
@@ -15590,7 +15596,7 @@ function buildSyncRequest(args, tokens) {
     accountId: connAccount && connAccount.AccountId || args.accountId || tokens.copilotStudio.account?.homeAccountId || "unknown",
     accountEmail: connAccount && connAccount.AccountEmail || args.accountEmail || tokens.copilotStudio.account?.username || void 0,
     tenantId: connAccount && connAccount.TenantId || args.tenantId,
-    clusterCategory: connAccount && connAccount.clusterCategory
+    clusterCategory: resolveClusterCategory(conn)
   };
   const request = {
     accountInfo,
@@ -15690,7 +15696,7 @@ async function cmdAuth(args) {
 async function acquireLspTokens(args) {
   const agentDir = findAgentDir(args.workspace);
   const conn = loadConnJson(agentDir);
-  const clusterCategory = conn?.AccountInfo?.clusterCategory;
+  const clusterCategory = resolveClusterCategory(conn);
   const tenantId = validateTenantId(conn?.AccountInfo?.TenantId || args.tenantId);
   const envUrl = validateDataverseUrl(args.environmentUrl);
   let cpsToken, dvToken;
@@ -16000,7 +16006,7 @@ async function cmdChanges(args) {
   if (!args.agentMgmtUrl) die("Could not resolve --agent-mgmt-url (or CPS_AGENT_MGMT_URL)");
   const agentDir = findAgentDir(args.workspace);
   const conn = loadConnJson(agentDir);
-  const clusterCategory = conn?.AccountInfo?.clusterCategory;
+  const clusterCategory = resolveClusterCategory(conn);
   const tenantId = validateTenantId(conn?.AccountInfo?.TenantId || args.tenantId);
   const envUrl = validateDataverseUrl(args.environmentUrl);
   let cpsToken, dvToken;
