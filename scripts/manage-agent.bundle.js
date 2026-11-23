@@ -14422,18 +14422,27 @@ var init_run_applescript = __esm({
 
 // node_modules/bundle-name/index.js
 async function bundleName(bundleId) {
+  if (typeof bundleId !== "string") {
+    throw new TypeError("Expected a string bundle identifier");
+  }
+  if (!bundleIdentifierPattern.test(bundleId)) {
+    throw new TypeError(`Invalid bundle identifier: ${JSON.stringify(bundleId)}`);
+  }
   return runAppleScript(`tell application "Finder" to set app_path to application file id "${bundleId}" as string
 tell application "System Events" to get value of property list item "CFBundleName" of property list file (app_path & ":Contents:Info.plist")`);
 }
+var bundleIdentifierPattern;
 var init_bundle_name = __esm({
   "node_modules/bundle-name/index.js"() {
     init_run_applescript();
+    bundleIdentifierPattern = /^[^\n\r"\\]+$/u;
   }
 });
 
 // node_modules/default-browser/windows.js
 async function defaultBrowser(_execFileAsync = execFileAsync3) {
-  const { stdout } = await _execFileAsync("reg", [
+  const regPath = `${import_node_process5.default.env.SYSTEMROOT ?? import_node_process5.default.env.windir ?? "C:\\Windows"}\\System32\\reg.exe`;
+  const { stdout } = await _execFileAsync(regPath, [
     "QUERY",
     " HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\Shell\\Associations\\UrlAssociations\\http\\UserChoice",
     "/v",
@@ -14450,9 +14459,10 @@ async function defaultBrowser(_execFileAsync = execFileAsync3) {
   const baseIdByHyphen = hyphenIndex === -1 ? void 0 : id.slice(0, hyphenIndex);
   return windowsBrowserProgIds[id] ?? windowsBrowserProgIds[baseIdByDot] ?? windowsBrowserProgIds[baseIdByHyphen] ?? { name: id, id };
 }
-var import_node_util5, import_node_child_process5, execFileAsync3, windowsBrowserProgIds, _windowsBrowserProgIdMap, UnknownBrowserError;
+var import_node_process5, import_node_util5, import_node_child_process5, execFileAsync3, windowsBrowserProgIds, _windowsBrowserProgIdMap, UnknownBrowserError;
 var init_windows = __esm({
   "node_modules/default-browser/windows.js"() {
+    import_node_process5 = __toESM(require("node:process"), 1);
     import_node_util5 = require("node:util");
     import_node_child_process5 = require("node:child_process");
     execFileAsync3 = (0, import_node_util5.promisify)(import_node_child_process5.execFile);
@@ -14483,27 +14493,27 @@ var init_windows = __esm({
 
 // node_modules/default-browser/index.js
 async function defaultBrowser2() {
-  if (import_node_process5.default.platform === "darwin") {
+  if (import_node_process6.default.platform === "darwin") {
     const id = await defaultBrowserId();
     const name = await bundleName(id);
     return { name, id };
   }
-  if (import_node_process5.default.platform === "linux") {
+  if (import_node_process6.default.platform === "linux") {
     const { stdout } = await execFileAsync4("xdg-mime", ["query", "default", "x-scheme-handler/http"]);
     const id = stdout.trim();
     const name = titleize(id.replace(/.desktop$/, "").replace("-", " "));
     return { name, id };
   }
-  if (import_node_process5.default.platform === "win32") {
+  if (import_node_process6.default.platform === "win32") {
     return defaultBrowser();
   }
   throw new Error("Only macOS, Linux, and Windows are supported");
 }
-var import_node_util6, import_node_process5, import_node_child_process6, execFileAsync4, titleize;
+var import_node_util6, import_node_process6, import_node_child_process6, execFileAsync4, titleize;
 var init_default_browser = __esm({
   "node_modules/default-browser/index.js"() {
     import_node_util6 = require("node:util");
-    import_node_process5 = __toESM(require("node:process"), 1);
+    import_node_process6 = __toESM(require("node:process"), 1);
     import_node_child_process6 = require("node:child_process");
     init_default_browser_id();
     init_bundle_name();
@@ -14515,11 +14525,11 @@ var init_default_browser = __esm({
 });
 
 // node_modules/is-in-ssh/index.js
-var import_node_process6, isInSsh, is_in_ssh_default;
+var import_node_process7, isInSsh, is_in_ssh_default;
 var init_is_in_ssh = __esm({
   "node_modules/is-in-ssh/index.js"() {
-    import_node_process6 = __toESM(require("node:process"), 1);
-    isInSsh = Boolean(import_node_process6.default.env.SSH_CONNECTION || import_node_process6.default.env.SSH_CLIENT || import_node_process6.default.env.SSH_TTY);
+    import_node_process7 = __toESM(require("node:process"), 1);
+    isInSsh = Boolean(import_node_process7.default.env.SSH_CONNECTION || import_node_process7.default.env.SSH_CLIENT || import_node_process7.default.env.SSH_TTY);
     is_in_ssh_default = isInSsh;
   }
 });
@@ -14550,10 +14560,10 @@ function detectPlatformBinary({ [platform]: platformBinary }, { wsl } = {}) {
   }
   return detectArchBinary(platformBinary);
 }
-var import_node_process7, import_node_path, import_node_url, import_node_child_process7, import_promises2, import_meta, fallbackAttemptSymbol, __dirname, localXdgOpenPath, platform, arch, tryEachApp, baseOpen, open, openApp, apps, open_default;
+var import_node_process8, import_node_path, import_node_url, import_node_child_process7, import_promises2, import_meta, fallbackAttemptSymbol, __dirname, localXdgOpenPath, platform, arch, tryEachApp, baseOpen, open, openApp, apps, open_default;
 var init_open = __esm({
   "node_modules/open/index.js"() {
-    import_node_process7 = __toESM(require("node:process"), 1);
+    import_node_process8 = __toESM(require("node:process"), 1);
     import_node_path = __toESM(require("node:path"), 1);
     import_node_url = require("node:url");
     import_node_child_process7 = __toESM(require("node:child_process"), 1);
@@ -14568,7 +14578,7 @@ var init_open = __esm({
     fallbackAttemptSymbol = Symbol("fallbackAttempt");
     __dirname = import_meta.url ? import_node_path.default.dirname((0, import_node_url.fileURLToPath)(import_meta.url)) : "";
     localXdgOpenPath = import_node_path.default.join(__dirname, "xdg-open");
-    ({ platform, arch } = import_node_process7.default);
+    ({ platform, arch } = import_node_process8.default);
     tryEachApp = async (apps2, opener) => {
       if (apps2.length === 0) {
         return;
@@ -14719,7 +14729,7 @@ var init_open = __esm({
             exeLocalXdgOpen = true;
           } catch {
           }
-          const useSystemXdgOpen = import_node_process7.default.versions.electron ?? (platform === "android" || isBundled || !exeLocalXdgOpen);
+          const useSystemXdgOpen = import_node_process8.default.versions.electron ?? (platform === "android" || isBundled || !exeLocalXdgOpen);
           command = useSystemXdgOpen ? "xdg-open" : localXdgOpenPath;
         }
         if (appArguments.length > 0) {
@@ -14913,7 +14923,19 @@ var require_shared_auth = __commonJS({
         } : void 0
       };
     }
+    function isNonInteractiveAuth() {
+      const value = String(process.env.CPS_NON_INTERACTIVE || "").trim().toLowerCase();
+      return value === "1" || value === "true";
+    }
+    function assertInteractiveAllowed(scopes, flow) {
+      if (!isNonInteractiveAuth()) return;
+      const scopeHint = Array.isArray(scopes) && scopes[0] ? ` for ${scopes[0]}` : "";
+      throw new Error(
+        `Failed to acquire MSAL token${scopeHint} in non-interactive mode (${flow} login disabled). Authenticate interactively first (e.g., 'manage-agent auth' or 'eval-api auth').`
+      );
+    }
     async function acquireTokenDeviceCode2(tenantId, clientId, scopes, cacheSlot) {
+      assertInteractiveAllowed(scopes, "device-code");
       const app = await createMsalApp(tenantId, clientId, cacheSlot);
       const result = await app.acquireTokenByDeviceCode({
         scopes,
@@ -14936,6 +14958,7 @@ var require_shared_auth = __commonJS({
       return buildTokenInfo2(result);
     }
     async function acquireTokenInteractive2(tenantId, clientId, scopes, cacheSlot) {
+      assertInteractiveAllowed(scopes, "interactive");
       const app = await createMsalApp(tenantId, clientId, cacheSlot);
       const result = await app.acquireTokenInteractive({
         scopes,
@@ -14978,6 +15001,7 @@ var require_shared_auth = __commonJS({
         log2(`${label}: using cached token (expires ${silent.expiresOn})`);
         return silent;
       }
+      assertInteractiveAllowed(scopes, "interactive");
       log2(`${label}: starting interactive login...`);
       return acquireTokenInteractive2(tenantId, clientId, scopes, cacheSlot);
     }
@@ -14996,6 +15020,8 @@ var require_shared_auth = __commonJS({
       getIslandResourceId: getIslandResourceId2,
       createMsalApp,
       buildTokenInfo: buildTokenInfo2,
+      isNonInteractiveAuth,
+      assertInteractiveAllowed,
       acquireTokenDeviceCode: acquireTokenDeviceCode2,
       acquireTokenInteractive: acquireTokenInteractive2,
       acquireTokenSilent: acquireTokenSilent2,
@@ -15065,6 +15091,7 @@ function parseArgs() {
     timeout: 3e5,
     // default: 5 minutes for publish polling
     force: false,
+    nonInteractive: false,
     url: null
   };
   for (let i = 0; i < args.length; i++) {
@@ -15110,6 +15137,9 @@ function parseArgs() {
       case "--force":
         parsed.force = true;
         break;
+      case "--non-interactive":
+        parsed.nonInteractive = true;
+        break;
       case "--url":
         parsed.url = args[++i];
         break;
@@ -15119,6 +15149,9 @@ function parseArgs() {
         }
         break;
     }
+  }
+  if (parsed.nonInteractive) {
+    process.env.CPS_NON_INTERACTIVE = "1";
   }
   if (!parsed.command) {
     die(

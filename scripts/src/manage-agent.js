@@ -21,6 +21,7 @@
  *   CPS_ENVIRONMENT_URL     Dataverse environment URL (e.g. https://org123.crm.dynamics.com)
  *   CPS_AGENT_MGMT_URL      Agent management URL
  *   CPS_ENVIRONMENT_NAME    Display name for the environment
+ *   CPS_NON_INTERACTIVE     Set to "1" or "true" to fail fast instead of opening interactive login (or pass --non-interactive)
  *
  * Output: JSON on stdout, diagnostics on stderr.
  */
@@ -114,6 +115,7 @@ function parseArgs() {
     owner: true, // default: filter by owner
     timeout: 300000, // default: 5 minutes for publish polling
     force: false,
+    nonInteractive: false,
     url: null,
   };
 
@@ -160,6 +162,9 @@ function parseArgs() {
       case "--force":
         parsed.force = true;
         break;
+      case "--non-interactive":
+        parsed.nonInteractive = true;
+        break;
       case "--url":
         parsed.url = args[++i];
         break;
@@ -169,6 +174,10 @@ function parseArgs() {
         }
         break;
     }
+  }
+
+  if (parsed.nonInteractive) {
+    process.env.CPS_NON_INTERACTIVE = "1";
   }
 
   if (!parsed.command) {

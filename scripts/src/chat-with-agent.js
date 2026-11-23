@@ -15,6 +15,7 @@
  *   node chat-with-agent.bundle.js "hello" --agent-dir <path>
  *   node chat-with-agent.bundle.js "hello" --token-endpoint <url>
  *   node chat-with-agent.bundle.js "hello" --directline-secret <secret>
+ *   node chat-with-agent.bundle.js "hello" --non-interactive  (or CPS_NON_INTERACTIVE=1)
  *
  * Output (stdout): single JSON object with full activity payloads
  * Diagnostics (stderr): human-readable progress lines
@@ -52,6 +53,7 @@ function parseArgs() {
     conversationId: null,
     agentDir: null,
     detectOnly: false,
+    nonInteractive: false,
     // DirectLine-specific (for explicit mode or multi-turn resume)
     tokenEndpoint: null,
     directlineSecret: null,
@@ -89,12 +91,19 @@ function parseArgs() {
       case "--detect-only":
         parsed.detectOnly = true;
         break;
+      case "--non-interactive":
+        parsed.nonInteractive = true;
+        break;
       default:
         if (!args[i].startsWith("--")) {
           parsed.utterance = args[i];
         }
         break;
     }
+  }
+
+  if (parsed.nonInteractive) {
+    process.env.CPS_NON_INTERACTIVE = "1";
   }
 
   if (!parsed.utterance && !parsed.detectOnly) die("Missing utterance argument.");
@@ -341,7 +350,11 @@ function activityToDict(activity) {
 }
 
 async function getSdkAccessToken(tenantId, clientId) {
-  const { acquireTokenSilent: sharedSilent, acquireTokenInteractive: sharedInteractive } = require("./shared-auth");
+  const {
+    acquireTokenSilent: sharedSilent,
+    acquireTokenInteractive: sharedInteractive,
+    assertInteractiveAllowed,
+  } = require("./shared-auth");
   const scope = "https://api.powerplatform.com/.default";
 
   // Use "test-agent" cache slot — shared with eval-api.js so one auth covers both
@@ -351,6 +364,7 @@ async function getSdkAccessToken(tenantId, clientId) {
     return silent.accessToken;
   }
 
+  assertInteractiveAllowed([scope], "interactive");
   log("No cached token — starting interactive login...");
   const token = await sharedInteractive(tenantId, clientId, [scope], "test-agent");
   return token.accessToken;
