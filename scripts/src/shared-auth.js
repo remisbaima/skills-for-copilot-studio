@@ -16,6 +16,15 @@ const { createCachePlugin } = require("./msal-cache");
 // Constants
 // ---------------------------------------------------------------------------
 
+// Contract capabilities exposed by this package's CJS API and CLI scripts.
+const CAPABILITIES = Object.freeze({
+  apiVersion: 1,
+  nonInteractiveAuth: true,
+  caseInsensitiveTenant: true,
+  pascalCaseClusterCategory: true,
+  stderrAuthLogging: true,
+});
+
 // VS Code's first-party client ID — pre-authorized with the Island API gateway
 // and Dataverse. No separate app registration needed.
 const VSCODE_CLIENT_ID = "51f81489-12ee-4a9e-aaae-a2591f45987d";
@@ -66,6 +75,13 @@ async function getDefaultCachePlugin() {
  */
 async function createMsalApp(tenantId, clientId, cacheSlot) {
   const msal = require("@azure/msal-node");
+  const system = {
+    loggerOptions: {
+      loggerCallback: (_level, message) => log(String(message)),
+      piiLoggingEnabled: false,
+      ...(msal.LogLevel ? { logLevel: msal.LogLevel.Warning } : {}),
+    },
+  };
 
   if (cacheSlot) {
     // Non-default slot: create a standalone app (not cached in the singleton map)
@@ -76,6 +92,7 @@ async function createMsalApp(tenantId, clientId, cacheSlot) {
         authority: `https://login.microsoftonline.com/${tenantId}`,
       },
       cache: { cachePlugin: plugin },
+      system,
     });
   }
 
@@ -90,6 +107,7 @@ async function createMsalApp(tenantId, clientId, cacheSlot) {
       authority: `https://login.microsoftonline.com/${tenantId}`,
     },
     cache: { cachePlugin },
+    system,
   });
   _msalApps.set(key, app);
   return app;
@@ -244,6 +262,7 @@ async function getOrAcquireIslandToken(tenantId, clusterCategory, label) {
 // ---------------------------------------------------------------------------
 
 module.exports = {
+  CAPABILITIES,
   VSCODE_CLIENT_ID,
   ISLAND_RESOURCE_IDS,
   getIslandResourceId,
